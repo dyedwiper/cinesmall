@@ -1,18 +1,18 @@
 // Service for selling tickets for screenings
 export interface Ticket {
-  id: string;
-  screeningId: string;
-  customerName: string;
+    id: string;
+    screeningId: string;
+    customerName: string;
 }
 
 export class TicketingService {
-  private tickets: Ticket[] = [];
+    private tickets: Ticket[] = [];
 
-  sellTicket(ticket: Ticket) {
-    this.tickets.push(ticket);
-  }
+    sellTicket(ticket: Ticket) {
+        this.tickets.push(ticket);
+    }
 
-  getTicketsForScreening(screeningId: string) {
-    return this.tickets.filter(t => t.screeningId === screeningId);
-  }
+    getTicketsForScreening(screeningId: string) {
+        return this.tickets.filter((t) => t.screeningId === screeningId);
+    }
 }

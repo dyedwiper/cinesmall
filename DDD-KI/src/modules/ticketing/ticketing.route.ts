@@ -1,15 +1,16 @@
 import { Hono } from 'hono';
-import { TicketingService, Ticket } from './ticketing.service';
+import { TicketingService } from './ticketing.service.js';
+import type { Ticket } from './ticketing.service.js';
 
 const ticketing = new TicketingService();
 export const ticketingRoute = new Hono();
 
 ticketingRoute.post('/tickets', async (c) => {
-  const ticket = await c.req.json();
-  ticketing.sellTicket(ticket as Ticket);
-  return c.json({ success: true });
+    const ticket = await c.req.json();
+    ticketing.sellTicket(ticket as Ticket);
+    return c.json({ success: true });
 });
 
 ticketingRoute.get('/tickets/:screeningId', (c) => {
-  return c.json(ticketing.getTicketsForScreening(c.req.param('screeningId')));
+    return c.json(ticketing.getTicketsForScreening(c.req.param('screeningId')));
 });
