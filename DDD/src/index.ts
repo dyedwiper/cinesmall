@@ -5,8 +5,8 @@ import weekplanning from './modules/weekplanning/route/weekplanning.route.js';
 
 const app = new Hono();
 
-app.get('/', (c) => {
-    return c.text('Hello Hono!');
+app.get('/', async (c) => {
+    return c.text('Success');
 });
 
 app.route('/weekplanning', weekplanning);
