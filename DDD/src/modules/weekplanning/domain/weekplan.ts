@@ -1,21 +1,33 @@
+import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
 import type { Screening } from './screening.js';
 
-export class Weekplan {
-    private screenings: Screening[] = [];
+export interface WeekplanProps {
+    startDate: Date;
+    screenings?: Screening[];
+}
 
-    private constructor(private startDate: Date) {}
-
-    public static create(startDate: Date) {
-        // validation e.g. "Is startDate a Thursday?"
-
-        return new Weekplan(startDate);
+export class Weekplan extends AggregateRoot<WeekplanProps> {
+    private constructor(props: WeekplanProps, uuid?: string) {
+        super(props, uuid);
     }
 
-    public addScreening(screening: Screening) {
+    static create(props: WeekplanProps, uuid?: string) {
+        if (props.startDate.getDay() !== 4) {
+            throw new Error('The weekplan must start on a Thursday.');
+        }
+
+        return new Weekplan(props, uuid);
+    }
+
+    addScreening(screening: Screening) {
+        if (!this.props.screenings) {
+            this.props.screenings = [];
+        }
+
         // validate e.g. that times of screenings don't overlap
 
-        this.screenings.push(screening);
+        this.props.screenings.push(screening);
     }
 
-    public removeScreening(screening: Screening) {}
+    removeScreening(screening: Screening) {}
 }

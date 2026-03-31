@@ -1,11 +1,18 @@
-export class Screening {
-    private id: string
-    private weekplanId: string
-    private date: Date
-    private film: string
-    private advertisements: string[]
+import { Entity } from '../../../shared/domain/entity.js';
 
-    public addAdvertisement()
+export interface ScreeningProps {
+    weekplanUuid: string;
+    date: Date;
+    film: string;
+    advertisements?: string[];
+}
 
-    public removeAdvertisement()
+export class Screening extends Entity<ScreeningProps> {
+    private constructor(props: ScreeningProps, uuid?: string) {
+        super(props, uuid);
+    }
+
+    static create(props: ScreeningProps, uuid?: string) {
+        return new Screening(props, uuid);
+    }
 }
