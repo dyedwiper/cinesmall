@@ -11,6 +11,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         super(props, uuid);
     }
 
+    // TODO: Maybe rename the method to from
     static create(props: WeekplanProps, uuid?: string) {
         // TODO: Create a value object for validation
         const startDate = new Date(props.startDate);

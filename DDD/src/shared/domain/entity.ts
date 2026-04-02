@@ -11,6 +11,7 @@ export abstract class Entity<T> {
 
     constructor(props: T, uuid?: string) {
         this.props = props;
+        // TODO: Put the creation of the UUID someplace else.
         this._uuid = uuid ?? crypto.randomUUID();
     }
 

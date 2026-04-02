@@ -14,6 +14,7 @@ export async function getWeekplan(uuid: string) {
         throw new Error('Weekplan not found.');
     }
 
+    // TODO: Write a dedicated mapper
     const screenings = data.screenings.map((item) =>
         Screening.create(
             {
