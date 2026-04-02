@@ -7,20 +7,15 @@ export interface WeekplanProps {
 }
 
 export class Weekplan extends AggregateRoot<WeekplanProps> {
-    get startDate(): Date {
-        return this.props.startDate;
-    }
-
-    get screenings(): Screening[] {
-        return this.props.screenings ?? [];
-    }
-
     private constructor(props: WeekplanProps, uuid?: string) {
         super(props, uuid);
     }
 
     static create(props: WeekplanProps, uuid?: string) {
-        if (props.startDate.getDay() !== 4) {
+        // TODO: Create a value object for validation
+        const startDate = new Date(props.startDate);
+
+        if (startDate.getDay() !== 4) {
             throw new Error('The weekplan must start on a Thursday.');
         }
 
@@ -28,9 +23,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     addScreening(screening: Screening) {
-        if (!this.props.screenings) {
-            this.props.screenings = [];
-        }
+        this.props.screenings ??= [];
 
         // validate e.g. that times of screenings don't overlap
 

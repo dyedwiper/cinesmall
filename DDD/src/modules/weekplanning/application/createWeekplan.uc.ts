@@ -1,5 +1,5 @@
 import { Weekplan } from '../domain/weekplan.js';
-import { insertWeekplan } from '../repo/weekplan.repo.js';
+import { saveWeekplan } from '../repo/weekplan.repo.js';
 import type { CreateWeekplanDto } from './createWeekplan.dto.js';
 
 export async function createWeekplan(dto: CreateWeekplanDto) {
@@ -7,5 +7,5 @@ export async function createWeekplan(dto: CreateWeekplanDto) {
 
     const weekplan = Weekplan.create(dto);
 
-    await insertWeekplan(weekplan);
+    await saveWeekplan(weekplan);
 }

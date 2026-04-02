@@ -12,6 +12,8 @@ export class Screening extends Entity<ScreeningProps> {
     }
 
     static create(props: ScreeningProps, uuid?: string) {
+        // TODO: validation
+
         return new Screening(props, uuid);
     }
 }

@@ -11,7 +11,7 @@ app.post('/weekplan', async (c) => {
     return c.status(201);
 });
 
-app.patch('/weekplan/screening', async (c) => {
+app.post('/screening', async (c) => {
     const body = await c.req.json();
     await addScreening(body);
 

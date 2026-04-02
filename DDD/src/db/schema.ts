@@ -1,27 +1,23 @@
-import { relations } from 'drizzle-orm';
-import { date, integer, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { defineRelations } from 'drizzle-orm';
+import { date, pgTable, varchar } from 'drizzle-orm/pg-core';
 
 export const weekplans = pgTable('weekplans', {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    uuid: varchar().notNull(),
+    uuid: varchar().primaryKey().notNull(),
     startDate: date({ mode: 'date' }).notNull(),
 });
 
-export const weekplansRelations = relations(weekplans, ({ many }) => ({
-    screenings: many(screenings),
-}));
-
 export const screenings = pgTable('screenings', {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    uuid: varchar().notNull(),
-    weekplanId: integer('weekplan_id').references(() => weekplans.id),
+    uuid: varchar().primaryKey().notNull(),
+    weekplanUuid: varchar('weekplan_uuid').notNull(),
     date: date({ mode: 'date' }).notNull(),
     film: varchar().notNull(),
 });
 
-export const screeningsRelations = relations(screenings, ({ one }) => ({
-    weekplan: one(weekplans, {
-        fields: [screenings.weekplanId],
-        references: [weekplans.id],
-    }),
+export const relations = defineRelations({ weekplans, screenings }, (r) => ({
+    weekplans: {
+        screenings: r.many.screenings({
+            from: r.weekplans.uuid,
+            to: r.screenings.weekplanUuid,
+        }),
+    },
 }));
