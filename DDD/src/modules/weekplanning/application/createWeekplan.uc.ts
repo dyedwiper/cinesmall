@@ -5,7 +5,7 @@ import type { CreateWeekplanDto } from './createWeekplan.dto.js';
 export async function createWeekplan(dto: CreateWeekplanDto) {
     // authorization
 
-    const weekplan = Weekplan.create({ startDate: dto.startDate });
+    const weekplan = Weekplan.create(dto);
 
     await insertWeekplan(weekplan);
 }

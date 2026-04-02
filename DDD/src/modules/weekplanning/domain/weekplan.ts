@@ -7,6 +7,14 @@ export interface WeekplanProps {
 }
 
 export class Weekplan extends AggregateRoot<WeekplanProps> {
+    get startDate(): Date {
+        return this.props.startDate;
+    }
+
+    get screenings(): Screening[] {
+        return this.props.screenings ?? [];
+    }
+
     private constructor(props: WeekplanProps, uuid?: string) {
         super(props, uuid);
     }

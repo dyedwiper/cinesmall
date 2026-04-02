@@ -4,7 +4,6 @@ export interface ScreeningProps {
     weekplanUuid: string;
     date: Date;
     film: string;
-    advertisements?: string[];
 }
 
 export class Screening extends Entity<ScreeningProps> {
