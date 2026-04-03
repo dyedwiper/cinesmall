@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../../../db/index.js';
-import { advertisements, screenings, weekplans } from '../../../db/schema.js';
+import { db } from '../../../shared/db/index.js';
+import { advertisements, screenings, weekplans } from '../../../shared/db/schema.js';
 import { Advertisement } from '../domain/advertisement.js';
 import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
@@ -40,10 +40,7 @@ export async function getWeekplan(uuid: string) {
             sc.uuid,
         );
     });
-    const weekplan = Weekplan.create(
-        { startDate: data.startDate, screenings },
-        data.uuid,
-    );
+    const weekplan = Weekplan.create({ startDate: data.startDate, screenings }, data.uuid);
 
     return weekplan;
 }
@@ -73,16 +70,12 @@ export async function saveWeekplan(weekplan: Weekplan) {
             props.screenings?.map((s) => s.uuid) ?? [],
         );
 
-        await db
-            .update(weekplans)
-            .set(props)
-            .where(eq(weekplans.uuid, weekplan.uuid));
+        await db.update(weekplans).set(props).where(eq(weekplans.uuid, weekplan.uuid));
     } else {
         await db.insert(weekplans).values({ ...props, uuid });
     }
 
-    const promises =
-        props.screenings?.map((screening) => saveScreening(screening)) ?? [];
+    const promises = props.screenings?.map((screening) => saveScreening(screening)) ?? [];
     await Promise.all(promises);
 }
 
@@ -100,8 +93,7 @@ async function saveScreening(screening: Screening) {
         await db.insert(screenings).values({ ...props, uuid });
     }
 
-    const promises =
-        props.advertisements?.map((ad) => saveAdvertisment(ad)) ?? [];
+    const promises = props.advertisements?.map((ad) => saveAdvertisment(ad)) ?? [];
     await Promise.all(promises);
 }
 
@@ -114,26 +106,16 @@ async function saveAdvertisment(advertisement: Advertisement) {
     });
 
     if (existing) {
-        await db
-            .update(advertisements)
-            .set(props)
-            .where(eq(advertisements.uuid, uuid));
+        await db.update(advertisements).set(props).where(eq(advertisements.uuid, uuid));
     } else {
         await db.insert(advertisements).values({ ...props, uuid });
     }
 }
 
-async function removeScreenings(
-    existingUuids: string[],
-    wantedUuids: string[],
-) {
-    const screeningsToRemove = existingUuids.filter(
-        (uuid) => !wantedUuids.includes(uuid),
-    );
+async function removeScreenings(existingUuids: string[], wantedUuids: string[]) {
+    const screeningsToRemove = existingUuids.filter((uuid) => !wantedUuids.includes(uuid));
 
-    const promises = screeningsToRemove.map((uuid) =>
-        db.delete(screenings).where(eq(screenings.uuid, uuid)),
-    );
+    const promises = screeningsToRemove.map((uuid) => db.delete(screenings).where(eq(screenings.uuid, uuid)));
 
     await Promise.all(promises);
 }
