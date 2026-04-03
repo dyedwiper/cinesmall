@@ -19,6 +19,8 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
             throw new Error('The weekplan must start on a Thursday.');
         }
 
+        // TODO: How to check if a weekplan for this startDate already exists?
+
         return new Weekplan(props, uuid);
     }
 

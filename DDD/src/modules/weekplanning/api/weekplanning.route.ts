@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { addScreening } from '../application/addScreening.uc.js';
-import { createWeekplan } from '../application/createWeekplan.uc.js';
-import { removeScreening } from '../application/removeScreening.uc.js';
+import { addScreening } from '../useCases/addScreening.uc.js';
+import { createWeekplan } from '../useCases/createWeekplan.uc.js';
+import { removeScreening } from '../useCases/removeScreening.uc.js';
 
 const app = new Hono();
 
