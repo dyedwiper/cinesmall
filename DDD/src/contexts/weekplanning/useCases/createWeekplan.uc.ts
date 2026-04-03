@@ -1,15 +1,12 @@
 import crypto from 'node:crypto';
 import { Weekplan } from '../domain/weekplan.js';
 import { saveWeekplan } from '../repo/weekplan.repo.js';
-import type { CreateWeekplanDto } from './createWeekplan.dto.js';
+import type { CreateWeekplanDto } from './dtos/createWeekplan.dto.js';
 
 export async function createWeekplan(dto: CreateWeekplanDto) {
     // authorization
 
-    const weekplan = Weekplan.create(
-        { startDate: new Date(dto.startDate) },
-        crypto.randomUUID(),
-    );
+    const weekplan = Weekplan.create({ startDate: new Date(dto.startDate) }, crypto.randomUUID());
 
     await saveWeekplan(weekplan);
 }
