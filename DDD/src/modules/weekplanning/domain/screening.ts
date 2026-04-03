@@ -4,6 +4,7 @@ export interface ScreeningProps {
     weekplanUuid: string;
     date: Date;
     film: string;
+    hallNumber: number;
 }
 
 export class Screening extends Entity<ScreeningProps> {
@@ -12,7 +13,9 @@ export class Screening extends Entity<ScreeningProps> {
     }
 
     static create(props: ScreeningProps, uuid?: string) {
-        // TODO: validation
+        if (props.hallNumber !== 1 && props.hallNumber !== 2) {
+            throw new Error('Hall number must be 1 or 2.');
+        }
 
         return new Screening(props, uuid);
     }

@@ -21,6 +21,7 @@ export async function getWeekplan(uuid: string) {
                 weekplanUuid: item.weekplanUuid,
                 date: item.date,
                 film: item.film,
+                hallNumber: item.hallNumber,
             },
             item.uuid,
         ),
@@ -37,13 +38,17 @@ export async function saveWeekplan(weekplan: Weekplan) {
     const uuid = weekplan.uuid;
     const props = weekplan.getProps();
 
-    props.screenings?.forEach((screening) => saveScreening(screening));
-
     const existing = await db.query.weekplans.findFirst({
         where: { uuid },
+        with: { screenings: true },
     });
 
     if (existing) {
+        await removeScreenings(
+            existing.screenings.map((s) => s.uuid),
+            props.screenings?.map((s) => s.uuid) ?? [],
+        );
+
         await db
             .update(weekplans)
             .set(props)
@@ -51,6 +56,10 @@ export async function saveWeekplan(weekplan: Weekplan) {
     } else {
         await db.insert(weekplans).values({ ...props, uuid });
     }
+
+    const promises =
+        props.screenings?.map((screening) => saveScreening(screening)) ?? [];
+    await Promise.all(promises);
 }
 
 async function saveScreening(screening: Screening) {
@@ -66,4 +75,19 @@ async function saveScreening(screening: Screening) {
     } else {
         await db.insert(screenings).values({ ...props, uuid });
     }
+}
+
+async function removeScreenings(
+    existingUuids: string[],
+    wantedUuids: string[],
+) {
+    const screeningsToRemove = existingUuids.filter(
+        (uuid) => !wantedUuids.includes(uuid),
+    );
+
+    const promises = screeningsToRemove.map((uuid) =>
+        db.delete(screenings).where(eq(screenings.uuid, uuid)),
+    );
+
+    await Promise.all(promises);
 }

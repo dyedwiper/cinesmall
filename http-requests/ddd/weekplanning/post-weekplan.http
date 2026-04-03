@@ -1,0 +1,5 @@
+POST http://localhost:2300/weekplanning/weekplan
+
+{
+    "startDate": "2026-04-09"
+}

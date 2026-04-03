@@ -11,11 +11,10 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         super(props, uuid);
     }
 
-    // TODO: Maybe rename the method to from
     static create(props: WeekplanProps, uuid?: string) {
-        // TODO: Create a value object for validation
         const startDate = new Date(props.startDate);
 
+        // Ideally validation should be implemented with Value Objects but I'm unsure how to do it elegantly.
         if (startDate.getDay() !== 4) {
             throw new Error('The weekplan must start on a Thursday.');
         }
@@ -31,5 +30,9 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         this.props.screenings.push(screening);
     }
 
-    removeScreening(screening: Screening) {}
+    removeScreening(uuid: string) {
+        this.props.screenings = this.props.screenings?.filter(
+            (screening) => screening.uuid !== uuid,
+        );
+    }
 }

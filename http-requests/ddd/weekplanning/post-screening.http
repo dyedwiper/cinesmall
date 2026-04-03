@@ -1,0 +1,8 @@
+POST http://localhost:2300/weekplanning/screening
+
+{
+    "weekplanUuid": "740983cf-3948-4f46-93d0-268dc393a98e",
+    "date": "2026-04-03",
+    "film": "Johnny Flash",
+    "hallNumber": 1
+}
