@@ -1,6 +1,6 @@
 export interface AddScreeningDto {
     weekplanUuid: string;
-    date: Date;
+    date: string;
     film: string;
     hallNumber: number;
     duration: number;

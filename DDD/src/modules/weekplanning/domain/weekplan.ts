@@ -12,10 +12,8 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     static create(props: WeekplanProps, uuid: string) {
-        const startDate = new Date(props.startDate);
-
         // Ideally validation should be implemented with Value Objects but I'm unsure how to do it elegantly.
-        if (startDate.getDay() !== 4) {
+        if (props.startDate.getDay() !== 4) {
             throw new Error('The weekplan must start on a Thursday.');
         }
 
@@ -27,7 +25,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     addScreening(screening: Screening) {
         this.props.screenings ??= [];
 
-        // validate e.g. that times of screenings don't overlap
+        this.checkForOverlappingScreenings(screening);
 
         this.props.screenings.push(screening);
     }
@@ -35,6 +33,32 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     removeScreening(uuid: string) {
         this.props.screenings = this.props.screenings?.filter(
             (screening) => screening.uuid !== uuid,
+        );
+    }
+
+    private checkForOverlappingScreenings(screening: Screening) {
+        const screeningsInSameHall = this.props.screenings?.filter(
+            (item) => item.hallNumber === screening.hallNumber,
+        );
+
+        if (
+            screeningsInSameHall?.some((item) =>
+                this.isOverlapping(item, screening),
+            )
+        ) {
+            throw new Error('The screening overlaps with another screening.');
+        }
+    }
+
+    private isOverlapping(screening1: Screening, screening2: Screening) {
+        const time1 = screening1.date.getTime();
+        const time2 = screening2.date.getTime();
+        const duration1InMs = screening1.duration * 60 * 1000;
+        const duration2InMs = screening2.duration * 60 * 1000;
+
+        return (
+            (time1 <= time2 && time1 + duration1InMs > time2) ||
+            (time2 <= time1 && time2 + duration2InMs > time1)
         );
     }
 }

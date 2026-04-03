@@ -1,4 +1,3 @@
-
 export interface CreateWeekplanDto {
-    startDate: Date
+    startDate: string;
 }

@@ -1,5 +1,11 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, pgTable, varchar } from 'drizzle-orm/pg-core';
+import {
+    date,
+    integer,
+    pgTable,
+    timestamp,
+    varchar,
+} from 'drizzle-orm/pg-core';
 
 export const weekplans = pgTable('weekplans', {
     uuid: varchar().primaryKey().notNull(),
@@ -9,7 +15,7 @@ export const weekplans = pgTable('weekplans', {
 export const screenings = pgTable('screenings', {
     uuid: varchar().primaryKey().notNull(),
     weekplanUuid: varchar('weekplan_uuid').notNull(),
-    date: date({ mode: 'date' }).notNull(),
+    date: timestamp({ mode: 'date', withTimezone: true }).notNull(),
     hallNumber: integer('hall_number').notNull(),
     film: varchar().notNull(),
     duration: integer().notNull(),

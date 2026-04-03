@@ -9,6 +9,18 @@ export interface ScreeningProps {
 }
 
 export class Screening extends Entity<ScreeningProps> {
+    get date() {
+        return this.props.date;
+    }
+
+    get hallNumber() {
+        return this.props.hallNumber;
+    }
+
+    get duration() {
+        return this.props.duration;
+    }
+
     private constructor(props: ScreeningProps, uuid: string) {
         super(props, uuid);
     }

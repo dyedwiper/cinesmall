@@ -6,7 +6,10 @@ import type { CreateWeekplanDto } from './createWeekplan.dto.js';
 export async function createWeekplan(dto: CreateWeekplanDto) {
     // authorization
 
-    const weekplan = Weekplan.create(dto, crypto.randomUUID());
+    const weekplan = Weekplan.create(
+        { startDate: new Date(dto.startDate) },
+        crypto.randomUUID(),
+    );
 
     await saveWeekplan(weekplan);
 }

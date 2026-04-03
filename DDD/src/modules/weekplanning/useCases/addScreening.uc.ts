@@ -4,7 +4,12 @@ import { getWeekplan, saveWeekplan } from '../repo/weekplan.repo.js';
 import type { AddScreeningDto } from './addScreening.dto.js';
 
 export async function addScreening(dto: AddScreeningDto) {
-    const screening = Screening.create(dto, crypto.randomUUID());
+    // authorization
+
+    const screening = Screening.create(
+        { ...dto, date: new Date(dto.date) },
+        crypto.randomUUID(),
+    );
     const weekplan = await getWeekplan(dto.weekplanUuid);
 
     weekplan.addScreening(screening);
