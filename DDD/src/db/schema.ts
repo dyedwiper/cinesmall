@@ -10,8 +10,9 @@ export const screenings = pgTable('screenings', {
     uuid: varchar().primaryKey().notNull(),
     weekplanUuid: varchar('weekplan_uuid').notNull(),
     date: date({ mode: 'date' }).notNull(),
-    film: varchar().notNull(),
     hallNumber: integer('hall_number').notNull(),
+    film: varchar().notNull(),
+    duration: integer().notNull(),
 });
 
 export const relations = defineRelations({ weekplans, screenings }, (r) => ({

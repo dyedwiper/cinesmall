@@ -3,4 +3,5 @@ export interface AddScreeningDto {
     date: Date;
     film: string;
     hallNumber: number;
+    duration: number;
 }

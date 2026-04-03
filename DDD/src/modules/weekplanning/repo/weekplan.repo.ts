@@ -20,8 +20,9 @@ export async function getWeekplan(uuid: string) {
             {
                 weekplanUuid: item.weekplanUuid,
                 date: item.date,
-                film: item.film,
                 hallNumber: item.hallNumber,
+                film: item.film,
+                duration: item.duration,
             },
             item.uuid,
         ),

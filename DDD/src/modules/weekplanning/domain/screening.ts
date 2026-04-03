@@ -3,8 +3,9 @@ import { Entity } from '../../../shared/domain/entity.js';
 export interface ScreeningProps {
     weekplanUuid: string;
     date: Date;
-    film: string;
     hallNumber: number;
+    film: string;
+    duration: number;
 }
 
 export class Screening extends Entity<ScreeningProps> {
