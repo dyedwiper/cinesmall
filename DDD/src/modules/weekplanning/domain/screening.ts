@@ -1,4 +1,5 @@
 import { Entity } from '../../../shared/domain/entity.js';
+import type { Advertisement } from './advertisement.js';
 
 export interface ScreeningProps {
     weekplanUuid: string;
@@ -6,6 +7,7 @@ export interface ScreeningProps {
     hallNumber: number;
     film: string;
     duration: number;
+    advertisements?: Advertisement[];
 }
 
 export class Screening extends Entity<ScreeningProps> {
@@ -21,6 +23,10 @@ export class Screening extends Entity<ScreeningProps> {
         return this.props.duration;
     }
 
+    get advertisements() {
+        return this.props.advertisements;
+    }
+
     private constructor(props: ScreeningProps, uuid: string) {
         super(props, uuid);
     }
@@ -31,5 +37,15 @@ export class Screening extends Entity<ScreeningProps> {
         }
 
         return new Screening(props, uuid);
+    }
+
+    addAdvertisement(advertisement: Advertisement) {
+        this.props.advertisements ??= [];
+
+        if (this.props.advertisements.length >= 3) {
+            throw new Error('Max 3 advertisements per screening are allowed.');
+        }
+
+        this.props.advertisements.push(advertisement);
     }
 }

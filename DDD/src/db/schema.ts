@@ -21,11 +21,27 @@ export const screenings = pgTable('screenings', {
     duration: integer().notNull(),
 });
 
-export const relations = defineRelations({ weekplans, screenings }, (r) => ({
-    weekplans: {
-        screenings: r.many.screenings({
-            from: r.weekplans.uuid,
-            to: r.screenings.weekplanUuid,
-        }),
-    },
-}));
+export const advertisements = pgTable('advertisements', {
+    uuid: varchar().primaryKey().notNull(),
+    screeningUuid: varchar('screening_uuid').notNull(),
+    name: varchar().notNull(),
+    duration: integer().notNull(),
+});
+
+export const relations = defineRelations(
+    { weekplans, screenings, advertisements },
+    (r) => ({
+        weekplans: {
+            screenings: r.many.screenings({
+                from: r.weekplans.uuid,
+                to: r.screenings.weekplanUuid,
+            }),
+        },
+        screenings: {
+            advertisements: r.many.advertisements({
+                from: r.screenings.uuid,
+                to: r.advertisements.screeningUuid,
+            }),
+        },
+    }),
+);
