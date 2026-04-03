@@ -1,5 +1,3 @@
-import crypto from 'node:crypto';
-
 // Inspired by: https://khalilstemmler.com/articles/typescript-domain-driven-design/entities/
 export abstract class Entity<T> {
     protected readonly _uuid: string;
@@ -9,10 +7,10 @@ export abstract class Entity<T> {
         return this._uuid;
     }
 
-    constructor(props: T, uuid?: string) {
+    constructor(props: T, uuid: string) {
         this.props = props;
         // TODO: Put the creation of the UUID someplace else.
-        this._uuid = uuid ?? crypto.randomUUID();
+        this._uuid = uuid;
     }
 
     getProps(): T {

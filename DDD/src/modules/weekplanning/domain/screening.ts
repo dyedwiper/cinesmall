@@ -8,11 +8,11 @@ export interface ScreeningProps {
 }
 
 export class Screening extends Entity<ScreeningProps> {
-    private constructor(props: ScreeningProps, uuid?: string) {
+    private constructor(props: ScreeningProps, uuid: string) {
         super(props, uuid);
     }
 
-    static create(props: ScreeningProps, uuid?: string) {
+    static create(props: ScreeningProps, uuid: string) {
         if (props.hallNumber !== 1 && props.hallNumber !== 2) {
             throw new Error('Hall number must be 1 or 2.');
         }

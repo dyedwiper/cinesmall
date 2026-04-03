@@ -7,11 +7,11 @@ export interface WeekplanProps {
 }
 
 export class Weekplan extends AggregateRoot<WeekplanProps> {
-    private constructor(props: WeekplanProps, uuid?: string) {
+    private constructor(props: WeekplanProps, uuid: string) {
         super(props, uuid);
     }
 
-    static create(props: WeekplanProps, uuid?: string) {
+    static create(props: WeekplanProps, uuid: string) {
         const startDate = new Date(props.startDate);
 
         // Ideally validation should be implemented with Value Objects but I'm unsure how to do it elegantly.
