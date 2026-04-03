@@ -20,10 +20,9 @@ app.post('/screening', async (c) => {
     return c.text('ok');
 });
 
-app.delete('/screening/:screeningUuid/weekplan/:weekplanUuid', async (c) => {
-    const screeningUuid = c.req.param('screeningUuid');
-    const weekplanUuid = c.req.param('weekplanUuid');
-    await removeScreening(screeningUuid, weekplanUuid);
+app.delete('/screening/:uuid', async (c) => {
+    const uuid = c.req.param('uuid');
+    await removeScreening(uuid);
 
     return c.text('ok');
 });
