@@ -1,10 +1,14 @@
 import { Hono } from 'hono';
 import { getWeekplanByStartDate } from '../repo/weekplan.repo.js';
+import { createHallplans } from '../useCases/createHallplans.uc.js';
 
 const app = new Hono();
 
-app.post('/saalplaene', (c) => {
-    return c.text('Saalpläne erzeugt');
+app.post('/hallplans/:weekplanUuid', async (c) => {
+    const weekplanUuid = c.req.param('weekplanUuid');
+    await createHallplans(weekplanUuid);
+
+    return c.text('ok');
 });
 
 app.get('/weekplan/:startDate', async (c) => {
@@ -14,7 +18,7 @@ app.get('/weekplan/:startDate', async (c) => {
     return c.json(weekplan);
 });
 
-app.get('saalplan/:id', (c) => {
+app.get('hallplan/:uuid', (c) => {
     return c.text('Saalplan für Vorstellung' + c.req.param('id'));
 });
 

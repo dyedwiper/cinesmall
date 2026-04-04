@@ -39,7 +39,7 @@ export async function getWeekplanUuidByScreeningUuid(screeningUuid: string) {
 
 export async function saveWeekplan(weekplan: Weekplan) {
     const uuid = weekplan.uuid;
-    const props = weekplan.getProps();
+    const { screenings } = weekplan.getProps();
 
     const existing = await db.query.weekplans.findFirst({
         where: { uuid },
@@ -51,7 +51,7 @@ export async function saveWeekplan(weekplan: Weekplan) {
     if (existing) {
         await removeScreenings(
             existing.screenings.map((s) => s.uuid),
-            props.screenings.map((s) => s.uuid),
+            screenings.map((s) => s.uuid),
         );
 
         await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.uuid, weekplan.uuid));
@@ -59,7 +59,7 @@ export async function saveWeekplan(weekplan: Weekplan) {
         await db.insert(weekplans).values(mappedWeekplan);
     }
 
-    const promises = props.screenings.map((screening) => saveScreening(screening));
+    const promises = screenings.map((screening) => saveScreening(screening));
     await Promise.all(promises);
 }
 

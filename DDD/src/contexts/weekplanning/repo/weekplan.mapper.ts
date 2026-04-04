@@ -19,7 +19,7 @@ export function mapScreeningToDb(screening: Screening) {
     const mapped = {
         uuid: uuid.value,
         weekplanUuid: weekplanUuid.value,
-        date,
+        date: date.toISOString(),
         hallNumber: hallNumber.value,
         film,
         duration: duration.value,

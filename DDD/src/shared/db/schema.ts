@@ -1,5 +1,5 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { date, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const weekplans = pgTable('weekplans', {
     uuid: varchar().primaryKey().notNull(),
@@ -9,7 +9,7 @@ export const weekplans = pgTable('weekplans', {
 export const screenings = pgTable('screenings', {
     uuid: varchar().primaryKey().notNull(),
     weekplanUuid: varchar('weekplan_uuid').notNull(),
-    date: timestamp({ withTimezone: true }).notNull(),
+    date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
     hallNumber: integer('hall_number').notNull(),
     film: varchar().notNull(),
     duration: integer().notNull(),
@@ -22,7 +22,14 @@ export const advertisements = pgTable('advertisements', {
     duration: integer().notNull(),
 });
 
-export const relations = defineRelations({ weekplans, screenings, advertisements }, (r) => ({
+export const hallplans = pgTable('hallplans', {
+    uuid: varchar().primaryKey().notNull(),
+    screeningUuid: varchar('screening_uuid').notNull(),
+    hallNumber: integer('hall_number').notNull(),
+    soldSeats: json('sold_seats'),
+});
+
+export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({
     weekplans: {
         screenings: r.many.screenings({
             from: r.weekplans.uuid,
@@ -34,5 +41,12 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
             from: r.screenings.uuid,
             to: r.advertisements.screeningUuid,
         }),
+        hallplans: r.many.hallplans({
+            from: r.screenings.uuid,
+            to: r.hallplans.screeningUuid,
+        }),
+    },
+    hallplans: {
+        screenings: r.one.screenings(),
     },
 }));

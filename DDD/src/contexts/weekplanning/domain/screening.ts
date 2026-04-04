@@ -8,7 +8,7 @@ import { HallNumber } from './valueObjects/hallNumber.js';
 interface ScreeningCreateParams {
     uuid?: string;
     weekplanUuid: string;
-    date: Date;
+    date: string;
     hallNumber: number;
     film: string;
     duration: number;
@@ -49,7 +49,7 @@ export class Screening extends Entity<ScreeningProps> {
         const props = {
             uuid: Uuid.create(params.uuid),
             weekplanUuid: Uuid.create(params.weekplanUuid),
-            date: params.date,
+            date: new Date(params.date),
             hallNumber: HallNumber.create(params.hallNumber),
             film: params.film,
             duration: Duration.create(params.duration),
