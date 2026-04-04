@@ -47,6 +47,6 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
         }),
     },
     hallplans: {
-        screenings: r.one.screenings(),
+        screening: r.one.screenings(),
     },
 }));

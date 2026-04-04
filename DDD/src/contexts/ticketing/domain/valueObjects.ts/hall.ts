@@ -10,6 +10,10 @@ export class Hall extends ValueObject<HallProps> {
         return this.props.number;
     }
 
+    get seats() {
+        return this.props.seats;
+    }
+
     private constructor(props: HallProps) {
         super(props);
     }

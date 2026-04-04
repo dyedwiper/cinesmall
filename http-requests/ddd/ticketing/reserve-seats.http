@@ -1,0 +1,5 @@
+PATCH http://localhost:2300/ticketing/hallplan/3b3d1e85-ef39-4f3b-9f55-1a6e2fc4bbd0
+
+{
+    "seats": ["a1", "a2"]
+}
