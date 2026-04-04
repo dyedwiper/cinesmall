@@ -4,6 +4,7 @@ import { advertisements, screenings, weekplans } from '../../../shared/db/schema
 import { Advertisement } from '../domain/advertisement.js';
 import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
+import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
 
 export async function getWeekplan(uuid: string) {
     const data = await db.query.weekplans.findFirst({
@@ -17,30 +18,11 @@ export async function getWeekplan(uuid: string) {
 
     // TODO: Write a dedicated mapper, but how to type?
     const screenings = data.screenings.map((sc) => {
-        const advertisements = sc.advertisements.map((ad) =>
-            Advertisement.create(
-                {
-                    screeningUuid: ad.screeningUuid,
-                    name: ad.name,
-                    duration: ad.duration,
-                },
-                ad.uuid,
-            ),
-        );
+        const advertisements = sc.advertisements.map((ad) => Advertisement.create(ad));
 
-        return Screening.create(
-            {
-                weekplanUuid: sc.weekplanUuid,
-                date: sc.date,
-                hallNumber: sc.hallNumber,
-                film: sc.film,
-                duration: sc.duration,
-                advertisements,
-            },
-            sc.uuid,
-        );
+        return Screening.create({ ...sc, advertisements });
     });
-    const weekplan = Weekplan.create({ startDate: data.startDate, screenings }, data.uuid);
+    const weekplan = Weekplan.create({ startDate: data.startDate, screenings });
 
     return weekplan;
 }
@@ -64,51 +46,56 @@ export async function saveWeekplan(weekplan: Weekplan) {
         with: { screenings: true },
     });
 
+    const mappedWeekplan = mapWeekplanToDb(weekplan);
+
     if (existing) {
         await removeScreenings(
             existing.screenings.map((s) => s.uuid),
-            props.screenings?.map((s) => s.uuid) ?? [],
+            props.screenings.map((s) => s.uuid),
         );
 
-        await db.update(weekplans).set(props).where(eq(weekplans.uuid, weekplan.uuid));
+        await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.uuid, weekplan.uuid));
     } else {
-        await db.insert(weekplans).values({ ...props, uuid });
+        await db.insert(weekplans).values(mappedWeekplan);
     }
 
-    const promises = props.screenings?.map((screening) => saveScreening(screening)) ?? [];
+    const promises = props.screenings.map((screening) => saveScreening(screening));
     await Promise.all(promises);
 }
 
 async function saveScreening(screening: Screening) {
     const uuid = screening.uuid;
-    const props = screening.getProps();
 
     const existing = await db.query.screenings.findFirst({
         where: { uuid },
     });
 
+    const mappedScreening = mapScreeningToDb(screening);
+
     if (existing) {
-        await db.update(screenings).set(props).where(eq(screenings.uuid, uuid));
+        await db.update(screenings).set(mappedScreening).where(eq(screenings.uuid, uuid));
     } else {
-        await db.insert(screenings).values({ ...props, uuid });
+        await db.insert(screenings).values(mappedScreening);
     }
 
-    const promises = props.advertisements?.map((ad) => saveAdvertisment(ad)) ?? [];
+    const props = screening.getProps();
+    const promises = props.advertisements.map((ad) => saveAdvertisment(ad));
     await Promise.all(promises);
 }
 
 async function saveAdvertisment(advertisement: Advertisement) {
     const uuid = advertisement.uuid;
-    const props = advertisement.getProps();
 
     const existing = await db.query.advertisements.findFirst({
         where: { uuid },
     });
 
+    const mappedAdvertisment = mapAdvertisementToDb(advertisement);
+
     if (existing) {
-        await db.update(advertisements).set(props).where(eq(advertisements.uuid, uuid));
+        await db.update(advertisements).set(mappedAdvertisment).where(eq(advertisements.uuid, uuid));
     } else {
-        await db.insert(advertisements).values({ ...props, uuid });
+        await db.insert(advertisements).values(mappedAdvertisment);
     }
 }
 

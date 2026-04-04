@@ -1,7 +1,12 @@
-import { Entity } from '../../../shared/domain/entity.js';
+import { advertisements } from '../../../shared/db/schema.js';
+import { Entity, type EntityProps } from '../../../shared/domain/entity.js';
+import { Uuid } from '../../../shared/domain/uuid.js';
 import type { Advertisement } from './advertisement.js';
+import { Duration } from './valueObjects/duration.js';
+import { HallNumber } from './valueObjects/hallNumber.js';
 
-export interface ScreeningProps {
+interface ScreeningCreateParams {
+    uuid?: string;
     weekplanUuid: string;
     date: Date;
     hallNumber: number;
@@ -10,38 +15,51 @@ export interface ScreeningProps {
     advertisements?: Advertisement[];
 }
 
+interface ScreeningProps extends EntityProps {
+    weekplanUuid: Uuid;
+    date: Date;
+    hallNumber: HallNumber;
+    film: string;
+    duration: Duration;
+    advertisements: Advertisement[];
+}
+
 export class Screening extends Entity<ScreeningProps> {
     get date() {
         return this.props.date;
     }
 
     get hallNumber() {
-        return this.props.hallNumber;
+        return this.props.hallNumber.value;
     }
 
     get duration() {
-        return this.props.duration;
+        return this.props.duration.value;
     }
 
     get advertisements() {
         return this.props.advertisements;
     }
 
-    private constructor(props: ScreeningProps, uuid: string) {
-        super(props, uuid);
+    private constructor(props: ScreeningProps) {
+        super(props);
     }
 
-    static create(props: ScreeningProps, uuid: string) {
-        if (props.hallNumber !== 1 && props.hallNumber !== 2) {
-            throw new Error('Hall number must be 1 or 2.');
-        }
+    static create(params: ScreeningCreateParams) {
+        const props = {
+            uuid: Uuid.create(params.uuid),
+            weekplanUuid: Uuid.create(params.weekplanUuid),
+            date: params.date,
+            hallNumber: HallNumber.create(params.hallNumber),
+            film: params.film,
+            duration: Duration.create(params.duration),
+            advertisements: params.advertisements ?? [],
+        };
 
-        return new Screening(props, uuid);
+        return new Screening(props);
     }
 
     addAdvertisement(advertisement: Advertisement) {
-        this.props.advertisements ??= [];
-
         if (this.props.advertisements.length >= 3) {
             throw new Error('Max 3 advertisements per screening are allowed.');
         }

@@ -1,10 +1,20 @@
+import crypto from 'node:crypto';
 import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
 import type { Advertisement } from './advertisement.js';
 import type { Screening } from './screening.js';
+import { StartDate } from './valueObjects/startDate.js';
+import type { EntityProps } from '../../../shared/domain/entity.js';
+import { Uuid } from '../../../shared/domain/uuid.js';
 
-export interface WeekplanProps {
-    startDate: Date;
+interface WeekplanCreateParams {
+    uuid?: string;
+    startDate: string;
     screenings?: Screening[];
+}
+
+interface WeekplanProps extends EntityProps {
+    startDate: StartDate;
+    screenings: Screening[];
 }
 
 export class Weekplan extends AggregateRoot<WeekplanProps> {
@@ -12,35 +22,33 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         return this.props.screenings;
     }
 
-    private constructor(props: WeekplanProps, uuid: string) {
-        super(props, uuid);
+    private constructor(props: WeekplanProps) {
+        super(props);
     }
 
-    static create(props: WeekplanProps, uuid: string) {
-        // Ideally validation should be implemented with Value Objects but I'm unsure how to do it elegantly.
-        if (props.startDate.getDay() !== 4) {
-            throw new Error('The weekplan must start on a Thursday.');
-        }
+    // TODO: How to check if a weekplan for this startDate already exists?
+    static create(params: WeekplanCreateParams) {
+        const props = {
+            uuid: Uuid.create(params.uuid),
+            startDate: StartDate.create(params.startDate),
+            screenings: params.screenings ?? [],
+        };
 
-        // TODO: How to check if a weekplan for this startDate already exists?
-
-        return new Weekplan(props, uuid);
+        return new Weekplan(props);
     }
 
     addScreening(screening: Screening) {
-        this.props.screenings ??= [];
-
         this.checkForOverlappingScreenings(screening);
 
         this.props.screenings.push(screening);
     }
 
     removeScreening(uuid: string) {
-        this.props.screenings = this.props.screenings?.filter((screening) => screening.uuid !== uuid);
+        this.props.screenings = this.props.screenings.filter((screening) => screening.uuid !== uuid);
     }
 
     addAdvertismentToScreening(advertisement: Advertisement, screeningUuid: string) {
-        const screening = this.props.screenings?.find((item) => item.uuid === screeningUuid);
+        const screening = this.props.screenings.find((item) => item.uuid === screeningUuid);
 
         if (!screening) throw new Error('Screening not found.');
 
@@ -50,9 +58,9 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     private checkForOverlappingScreenings(screening: Screening) {
-        const screeningsInSameHall = this.props.screenings?.filter((item) => item.hallNumber === screening.hallNumber);
+        const screeningsInSameHall = this.props.screenings.filter((item) => item.hallNumber === screening.hallNumber);
 
-        if (screeningsInSameHall?.some((item) => this.isOverlapping(item, screening))) {
+        if (screeningsInSameHall.some((item) => this.isOverlapping(item, screening))) {
             throw new Error('The screening overlaps with another screening.');
         }
     }
@@ -74,8 +82,8 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     private computeDurationOfAdvertisements(screening: Screening) {
-        const sum = screening.advertisements?.reduce((acc, cur) => acc + cur.duration, 0);
+        const sum = screening.advertisements.reduce((acc, cur) => acc + cur.duration, 0);
 
-        return sum ?? 0;
+        return sum;
     }
 }

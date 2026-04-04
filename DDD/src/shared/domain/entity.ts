@@ -1,16 +1,19 @@
+import type { Uuid } from './uuid.js';
+
+export interface EntityProps {
+    uuid: Uuid;
+}
+
 // Inspired by: https://khalilstemmler.com/articles/typescript-domain-driven-design/entities/
-export abstract class Entity<T> {
-    protected readonly _uuid: string;
+export abstract class Entity<T extends EntityProps> {
     protected props: T;
 
     get uuid() {
-        return this._uuid;
+        return this.props.uuid.value;
     }
 
-    constructor(props: T, uuid: string) {
+    constructor(props: T) {
         this.props = props;
-        // TODO: Put the creation of the UUID someplace else.
-        this._uuid = uuid;
     }
 
     getProps(): T {
