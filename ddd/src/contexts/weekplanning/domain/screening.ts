@@ -1,14 +1,14 @@
 import { advertisements } from '../../../shared/db/schema.js';
 import { Entity, type EntityProps } from '../../../shared/domain/entity.js';
-import { Uuid } from '../../../shared/domain/uuid.js';
+import { Id } from '../../../shared/domain/id.js';
 import type { Advertisement } from './advertisement.js';
 import { Duration } from './valueObjects/duration.js';
 import { Film } from './valueObjects/film.js';
 import { HallNumber } from './valueObjects/hallNumber.js';
 
 interface ScreeningCreateParams {
-    uuid?: string;
-    weekplanUuid: string;
+    id?: string;
+    weekplanId: string;
     date: string;
     hallNumber: number;
     film: string;
@@ -17,7 +17,7 @@ interface ScreeningCreateParams {
 }
 
 interface ScreeningProps extends EntityProps {
-    weekplanUuid: Uuid;
+    weekplanId: Id;
     date: Date;
     hallNumber: HallNumber;
     film: Film;
@@ -48,8 +48,8 @@ export class Screening extends Entity<ScreeningProps> {
 
     static create(params: ScreeningCreateParams) {
         const props = {
-            uuid: Uuid.create(params.uuid),
-            weekplanUuid: Uuid.create(params.weekplanUuid),
+            id: Id.create(params.id),
+            weekplanId: Id.create(params.weekplanId),
             date: new Date(params.date),
             hallNumber: HallNumber.create(params.hallNumber),
             film: Film.create(params.film),

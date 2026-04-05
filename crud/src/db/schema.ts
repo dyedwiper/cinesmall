@@ -2,13 +2,13 @@ import { defineRelations } from 'drizzle-orm';
 import { date, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const weekplans = pgTable('weekplans', {
-    uuid: varchar().primaryKey().notNull(),
+    id: varchar().primaryKey().notNull(),
     startDate: date().notNull(),
 });
 
 export const screenings = pgTable('screenings', {
-    uuid: varchar().primaryKey().notNull(),
-    weekplanUuid: varchar('weekplan_uuid').notNull(),
+    id: varchar().primaryKey().notNull(),
+    weekplanId: varchar('weekplan_id').notNull(),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
     hallNumber: integer('hall_number').notNull(),
     film: varchar().notNull(),
@@ -16,15 +16,15 @@ export const screenings = pgTable('screenings', {
 });
 
 export const advertisements = pgTable('advertisements', {
-    uuid: varchar().primaryKey().notNull(),
-    screeningUuid: varchar('screening_uuid').notNull(),
+    id: varchar().primaryKey().notNull(),
+    screeningId: varchar('screening_id').notNull(),
     name: varchar().notNull(),
     duration: integer().notNull(),
 });
 
 export const hallplans = pgTable('hallplans', {
-    uuid: varchar().primaryKey().notNull(),
-    screeningUuid: varchar('screening_uuid').notNull(),
+    id: varchar().primaryKey().notNull(),
+    screeningId: varchar('screening_id').notNull(),
     hallNumber: integer('hall_number').notNull(),
     soldSeats: json('sold_seats'),
 });
@@ -32,18 +32,18 @@ export const hallplans = pgTable('hallplans', {
 export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({
     weekplans: {
         screenings: r.many.screenings({
-            from: r.weekplans.uuid,
-            to: r.screenings.weekplanUuid,
+            from: r.weekplans.id,
+            to: r.screenings.weekplanId,
         }),
     },
     screenings: {
         advertisements: r.many.advertisements({
-            from: r.screenings.uuid,
-            to: r.advertisements.screeningUuid,
+            from: r.screenings.id,
+            to: r.advertisements.screeningId,
         }),
         hallplans: r.many.hallplans({
-            from: r.screenings.uuid,
-            to: r.hallplans.screeningUuid,
+            from: r.screenings.id,
+            to: r.hallplans.screeningId,
         }),
     },
     hallplans: {

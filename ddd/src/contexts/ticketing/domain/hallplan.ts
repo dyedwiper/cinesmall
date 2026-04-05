@@ -1,17 +1,17 @@
 import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
 import { type EntityProps } from '../../../shared/domain/entity.js';
-import { Uuid } from '../../../shared/domain/uuid.js';
+import { Id } from '../../../shared/domain/id.js';
 import { Hall } from './valueObjects.ts/hall.js';
 
 interface HallplanCreateParams {
-    uuid?: string;
-    screeningUuid: string;
+    id?: string;
+    screeningId: string;
     hallNumber: number;
     soldSeats?: string[];
 }
 
 interface HallplanProps extends EntityProps {
-    screeningUuid: Uuid;
+    screeningId: Id;
     hall: Hall;
     soldSeats: string[];
 }
@@ -23,8 +23,8 @@ export class Hallplan extends AggregateRoot<HallplanProps> {
 
     static create(params: HallplanCreateParams) {
         const props = {
-            uuid: Uuid.create(params.uuid),
-            screeningUuid: Uuid.create(params.screeningUuid),
+            id: Id.create(params.id),
+            screeningId: Id.create(params.screeningId),
             hall: Hall.create(params.hallNumber),
             soldSeats: params.soldSeats ?? [],
         };

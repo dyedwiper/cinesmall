@@ -6,9 +6,9 @@ import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
 import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
 
-export async function getWeekplanByUuid(uuid: string) {
+export async function getWeekplanById(id: string) {
     const data = await db.query.weekplans.findFirst({
-        where: { uuid },
+        where: { id },
         with: { screenings: { with: { advertisements: true } } },
     });
 
@@ -27,22 +27,22 @@ export async function getWeekplanByUuid(uuid: string) {
     return weekplan;
 }
 
-export async function getWeekplanUuidByScreeningUuid(screeningUuid: string) {
+export async function getWeekplanIdByScreeningId(screeningId: string) {
     const screeningData = await db.query.screenings.findFirst({
-        where: { uuid: screeningUuid },
+        where: { id: screeningId },
     });
 
     if (!screeningData) throw new Error('Screening not found.');
 
-    return screeningData.weekplanUuid;
+    return screeningData.weekplanId;
 }
 
 export async function saveWeekplan(weekplan: Weekplan) {
-    const uuid = weekplan.uuid;
+    const id = weekplan.id;
     const { screenings } = weekplan.getProps();
 
     const existing = await db.query.weekplans.findFirst({
-        where: { uuid },
+        where: { id },
         with: { screenings: true },
     });
 
@@ -50,11 +50,11 @@ export async function saveWeekplan(weekplan: Weekplan) {
 
     if (existing) {
         await removeScreenings(
-            existing.screenings.map((s) => s.uuid),
-            screenings.map((s) => s.uuid),
+            existing.screenings.map((s) => s.id),
+            screenings.map((s) => s.id),
         );
 
-        await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.uuid, weekplan.uuid));
+        await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.id, weekplan.id));
     } else {
         await db.insert(weekplans).values(mappedWeekplan);
     }
@@ -64,16 +64,16 @@ export async function saveWeekplan(weekplan: Weekplan) {
 }
 
 async function saveScreening(screening: Screening) {
-    const uuid = screening.uuid;
+    const id = screening.id;
 
     const existing = await db.query.screenings.findFirst({
-        where: { uuid },
+        where: { id },
     });
 
     const mappedScreening = mapScreeningToDb(screening);
 
     if (existing) {
-        await db.update(screenings).set(mappedScreening).where(eq(screenings.uuid, uuid));
+        await db.update(screenings).set(mappedScreening).where(eq(screenings.id, id));
     } else {
         await db.insert(screenings).values(mappedScreening);
     }
@@ -84,25 +84,25 @@ async function saveScreening(screening: Screening) {
 }
 
 async function saveAdvertisment(advertisement: Advertisement) {
-    const uuid = advertisement.uuid;
+    const id = advertisement.id;
 
     const existing = await db.query.advertisements.findFirst({
-        where: { uuid },
+        where: { id },
     });
 
     const mappedAdvertisment = mapAdvertisementToDb(advertisement);
 
     if (existing) {
-        await db.update(advertisements).set(mappedAdvertisment).where(eq(advertisements.uuid, uuid));
+        await db.update(advertisements).set(mappedAdvertisment).where(eq(advertisements.id, id));
     } else {
         await db.insert(advertisements).values(mappedAdvertisment);
     }
 }
 
-async function removeScreenings(existingUuids: string[], wantedUuids: string[]) {
-    const screeningsToRemove = existingUuids.filter((uuid) => !wantedUuids.includes(uuid));
+async function removeScreenings(existingIds: string[], wantedIds: string[]) {
+    const screeningsToRemove = existingIds.filter((id) => !wantedIds.includes(id));
 
-    const promises = screeningsToRemove.map((uuid) => db.delete(screenings).where(eq(screenings.uuid, uuid)));
+    const promises = screeningsToRemove.map((id) => db.delete(screenings).where(eq(screenings.id, id)));
 
     await Promise.all(promises);
 }

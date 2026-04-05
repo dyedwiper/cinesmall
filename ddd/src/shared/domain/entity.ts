@@ -1,15 +1,15 @@
-import type { Uuid } from './uuid.js';
+import type { Id } from './id.js';
 
 export interface EntityProps {
-    uuid: Uuid;
+    id: Id;
 }
 
 // Inspired by: https://khalilstemmler.com/articles/typescript-domain-driven-design/entities/
 export abstract class Entity<T extends EntityProps> {
     protected props: T;
 
-    get uuid() {
-        return this.props.uuid.value;
+    get id() {
+        return this.props.id.value;
     }
 
     constructor(props: T) {

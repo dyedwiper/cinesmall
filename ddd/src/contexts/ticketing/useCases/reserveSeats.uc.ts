@@ -1,7 +1,7 @@
-import { getHallplanByUuid, saveHallplan } from '../db/hallplan.repo.js';
+import { getHallplanById, saveHallplan } from '../db/hallplan.repo.js';
 
-export async function reserveSeats(hallplanUuid: string, seats: string[]) {
-    const hallplan = await getHallplanByUuid(hallplanUuid);
+export async function reserveSeats(hallplanId: string, seats: string[]) {
+    const hallplan = await getHallplanById(hallplanId);
 
     seats.forEach((seat) => hallplan.reserveSeat(seat));
 

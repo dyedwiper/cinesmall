@@ -1,1 +1,1 @@
-export function getWeekplanByUuid(uuid: string) {}
+export function getWeekplanById(id: string) {}

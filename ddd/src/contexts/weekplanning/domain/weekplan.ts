@@ -4,10 +4,10 @@ import type { Advertisement } from './advertisement.js';
 import type { Screening } from './screening.js';
 import { StartDate } from './valueObjects/startDate.js';
 import type { EntityProps } from '../../../shared/domain/entity.js';
-import { Uuid } from '../../../shared/domain/uuid.js';
+import { Id } from '../../../shared/domain/id.js';
 
 interface WeekplanCreateParams {
-    uuid?: string;
+    id?: string;
     startDate: string;
     screenings?: Screening[];
 }
@@ -29,7 +29,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     // TODO: How to check if a weekplan for this startDate already exists?
     static create(params: WeekplanCreateParams) {
         const props = {
-            uuid: Uuid.create(params.uuid),
+            id: Id.create(params.id),
             startDate: StartDate.create(params.startDate),
             screenings: params.screenings ?? [],
         };
@@ -43,12 +43,12 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         this.props.screenings.push(screening);
     }
 
-    removeScreening(uuid: string) {
-        this.props.screenings = this.props.screenings.filter((screening) => screening.uuid !== uuid);
+    removeScreening(id: string) {
+        this.props.screenings = this.props.screenings.filter((screening) => screening.id !== id);
     }
 
-    addAdvertismentToScreening(advertisement: Advertisement, screeningUuid: string) {
-        const screening = this.props.screenings.find((item) => item.uuid === screeningUuid);
+    addAdvertismentToScreening(advertisement: Advertisement, screeningId: string) {
+        const screening = this.props.screenings.find((item) => item.id === screeningId);
 
         if (!screening) throw new Error('Screening not found.');
 
@@ -66,7 +66,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     private isOverlapping(screening1: Screening, screening2: Screening) {
-        if (screening1.uuid === screening2.uuid) return false;
+        if (screening1.id === screening2.id) return false;
 
         const time1 = screening1.date.getTime();
         const time2 = screening2.date.getTime();

@@ -1,7 +1,7 @@
 import { db } from '../../../shared/db/index.js';
 
-export async function getScreeningsByWeekplanUuid(weekplanUuid: string) {
-    const results = await db.query.screenings.findMany({ where: { weekplanUuid } });
+export async function getScreeningsByWeekplanId(weekplanId: string) {
+    const results = await db.query.screenings.findMany({ where: { weekplanId } });
 
     return results;
 }

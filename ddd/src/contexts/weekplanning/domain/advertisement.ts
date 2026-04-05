@@ -1,16 +1,16 @@
 import { Entity, type EntityProps } from '../../../shared/domain/entity.js';
-import { Uuid } from '../../../shared/domain/uuid.js';
+import { Id } from '../../../shared/domain/id.js';
 import { Duration } from './valueObjects/duration.js';
 
 interface AdvertisementCreateParams {
-    uuid?: string;
-    screeningUuid: string;
+    id?: string;
+    screeningId: string;
     name: string;
     duration: number;
 }
 
 interface AdvertisementProps extends EntityProps {
-    screeningUuid: Uuid;
+    screeningId: Id;
     name: string;
     duration: Duration;
 }
@@ -26,8 +26,8 @@ export class Advertisement extends Entity<AdvertisementProps> {
 
     static create(params: AdvertisementCreateParams) {
         const props = {
-            uuid: Uuid.create(params.uuid),
-            screeningUuid: Uuid.create(params.screeningUuid),
+            id: Id.create(params.id),
+            screeningId: Id.create(params.screeningId),
             name: params.name,
             duration: Duration.create(params.duration),
         };

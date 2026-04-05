@@ -20,9 +20,9 @@ app.post('/screening', async (c) => {
     return c.text('ok');
 });
 
-app.delete('/screening/:uuid', async (c) => {
-    const uuid = c.req.param('uuid');
-    await removeScreening(uuid);
+app.delete('/screening/:id', async (c) => {
+    const id = c.req.param('id');
+    await removeScreening(id);
 
     return c.text('ok');
 });

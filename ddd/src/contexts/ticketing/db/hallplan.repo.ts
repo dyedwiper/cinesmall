@@ -4,16 +4,16 @@ import { hallplans } from '../../../shared/db/schema.js';
 import { Hallplan } from '../domain/hallplan.js';
 import { mapHallplanToDb } from './hallplan.mapper.js';
 
-export async function getHallplanDtoByUuid(uuid: string) {
-    const result = await db.query.hallplans.findFirst({ where: { uuid }, with: { screening: true } });
+export async function getHallplanDtoById(id: string) {
+    const result = await db.query.hallplans.findFirst({ where: { id }, with: { screening: true } });
 
     if (!result) throw new Error('Hallplan not found.');
 
     return result;
 }
 
-export async function getHallplanByUuid(uuid: string) {
-    const result = await db.query.hallplans.findFirst({ where: { uuid } });
+export async function getHallplanById(id: string) {
+    const result = await db.query.hallplans.findFirst({ where: { id } });
 
     if (!result) throw new Error('Hallplan not found.');
 
@@ -25,12 +25,12 @@ export async function getHallplanByUuid(uuid: string) {
 }
 
 export async function saveHallplan(hallplan: Hallplan) {
-    const existing = await db.query.hallplans.findFirst({ where: { uuid: hallplan.uuid } });
+    const existing = await db.query.hallplans.findFirst({ where: { id: hallplan.id } });
 
     const mappedHallplan = mapHallplanToDb(hallplan);
 
     if (existing) {
-        await db.update(hallplans).set(mappedHallplan).where(eq(hallplans.uuid, hallplan.uuid));
+        await db.update(hallplans).set(mappedHallplan).where(eq(hallplans.id, hallplan.id));
     } else {
         await db.insert(hallplans).values(mappedHallplan);
     }

@@ -1,5 +1,5 @@
 export interface AddAdvertisementDto {
-    screeningUuid: string;
+    screeningId: string;
     name: string;
     duration: number;
 }

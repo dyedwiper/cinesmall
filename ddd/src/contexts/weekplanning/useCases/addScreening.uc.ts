@@ -1,12 +1,12 @@
 import { Screening } from '../domain/screening.js';
-import { getWeekplanByUuid, saveWeekplan } from '../db/weekplan.repo.js';
+import { getWeekplanById, saveWeekplan } from '../db/weekplan.repo.js';
 import type { AddScreeningDto } from './dtos/addScreening.dto.js';
 
 export async function addScreening(dto: AddScreeningDto) {
     // authorization
 
     const screening = Screening.create({ ...dto, date: new Date(dto.date) });
-    const weekplan = await getWeekplanByUuid(dto.weekplanUuid);
+    const weekplan = await getWeekplanById(dto.weekplanId);
 
     weekplan.addScreening(screening);
 
