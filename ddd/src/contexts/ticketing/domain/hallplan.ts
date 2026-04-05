@@ -1,7 +1,6 @@
 import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
 import { type EntityProps } from '../../../shared/domain/entity.js';
 import { Uuid } from '../../../shared/domain/uuid.js';
-import type { Screening } from './screening.js';
 import { Hall } from './valueObjects.ts/hall.js';
 
 interface HallplanCreateParams {
