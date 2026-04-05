@@ -1,9 +1,11 @@
 import { Hono } from 'hono';
+import { createHallplans } from '../services/hallplan.service.js';
 
 const app = new Hono();
 
-app.post('/', async (c) => {
-    const body = await c.req.json();
+app.post('/:weekplanId', async (c) => {
+    const weekplanId = c.req.param('weekplanId');
+    await createHallplans(weekplanId);
 
     return c.text('ok');
 });

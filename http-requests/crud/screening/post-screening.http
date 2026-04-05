@@ -1,8 +1,8 @@
 POST http://localhost:2301/screening
 
 {
-    "weekplanId": "740983cf-3948-4f46-93d0-268dc393a98e",
-    "date": "2026-04-03T23:00:00Z",
+    "weekplanId": "8c38106b-207f-4e57-bcc0-169122da3238",
+    "date": "2026-03-27T23:00:00Z",
     "hallNumber": 1,
     "film": "Johnny Flash",
     "duration": 90
