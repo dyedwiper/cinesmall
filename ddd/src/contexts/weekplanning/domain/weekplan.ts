@@ -37,6 +37,7 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
     }
 
     addScreening(screening: Screening) {
+        this.checkIfDateBelongsToWeekplan(screening);
         this.checkForOverlappingScreenings(screening);
 
         this.props.screenings.push(screening);
@@ -54,6 +55,17 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         screening.addAdvertisement(advertisement);
 
         this.checkForOverlappingScreenings(screening);
+    }
+
+    private checkIfDateBelongsToWeekplan(screening: Screening) {
+        const startOfWeek = this.props.startDate.value.getTime();
+        const endOfWeek = startOfWeek + 7 * 24 * 60 * 60 * 1000;
+
+        const screeningTime = screening.date.getTime();
+
+        if (screeningTime < startOfWeek || screeningTime > endOfWeek) {
+            throw new Error("The screening's date does not belong in the weekplan.");
+        }
     }
 
     private checkForOverlappingScreenings(screening: Screening) {
