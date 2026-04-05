@@ -21,7 +21,7 @@ export function mapScreeningToDb(screening: Screening) {
         weekplanUuid: weekplanUuid.value,
         date: date.toISOString(),
         hallNumber: hallNumber.value,
-        film,
+        film: film.title,
         duration: duration.value,
     };
 

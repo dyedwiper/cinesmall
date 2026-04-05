@@ -3,6 +3,7 @@ import { Entity, type EntityProps } from '../../../shared/domain/entity.js';
 import { Uuid } from '../../../shared/domain/uuid.js';
 import type { Advertisement } from './advertisement.js';
 import { Duration } from './valueObjects/duration.js';
+import { Film } from './valueObjects/film.js';
 import { HallNumber } from './valueObjects/hallNumber.js';
 
 interface ScreeningCreateParams {
@@ -19,7 +20,7 @@ interface ScreeningProps extends EntityProps {
     weekplanUuid: Uuid;
     date: Date;
     hallNumber: HallNumber;
-    film: string;
+    film: Film;
     duration: Duration;
     advertisements: Advertisement[];
 }
@@ -51,7 +52,7 @@ export class Screening extends Entity<ScreeningProps> {
             weekplanUuid: Uuid.create(params.weekplanUuid),
             date: new Date(params.date),
             hallNumber: HallNumber.create(params.hallNumber),
-            film: params.film,
+            film: Film.create(params.film),
             duration: Duration.create(params.duration),
             advertisements: params.advertisements ?? [],
         };
