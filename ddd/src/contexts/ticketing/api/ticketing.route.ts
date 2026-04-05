@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { getWeekplanByStartDate } from '../repo/weekplan.repo.js';
+import { getWeekplanByStartDate } from '../db/weekplan.repo.js';
 import { createHallplans } from '../useCases/createHallplans.uc.js';
-import { getHallplanDtoByUuid } from '../repo/hallplan.repo.js';
+import { getHallplanDtoByUuid } from '../db/hallplan.repo.js';
 import { reserveSeats } from '../useCases/reserveSeats.uc.js';
 
 const app = new Hono();

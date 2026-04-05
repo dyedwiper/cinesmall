@@ -1,5 +1,5 @@
 import { Screening } from '../domain/screening.js';
-import { getWeekplan, saveWeekplan } from '../repo/weekplan.repo.js';
+import { getWeekplan, saveWeekplan } from '../db/weekplan.repo.js';
 import type { AddScreeningDto } from './dtos/addScreening.dto.js';
 
 export async function addScreening(dto: AddScreeningDto) {

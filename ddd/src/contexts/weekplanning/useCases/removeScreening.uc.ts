@@ -1,4 +1,4 @@
-import { getWeekplan, getWeekplanUuidByScreeningUuid, saveWeekplan } from '../repo/weekplan.repo.js';
+import { getWeekplan, getWeekplanUuidByScreeningUuid, saveWeekplan } from '../db/weekplan.repo.js';
 
 export async function removeScreening(uuid: string) {
     const weekplanUuid = await getWeekplanUuidByScreeningUuid(uuid);

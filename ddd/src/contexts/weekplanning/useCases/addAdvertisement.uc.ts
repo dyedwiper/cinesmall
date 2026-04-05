@@ -1,5 +1,5 @@
 import { Advertisement } from '../domain/advertisement.js';
-import { getWeekplan, getWeekplanUuidByScreeningUuid, saveWeekplan } from '../repo/weekplan.repo.js';
+import { getWeekplan, getWeekplanUuidByScreeningUuid, saveWeekplan } from '../db/weekplan.repo.js';
 import type { AddAdvertisementDto } from './dtos/addAdvertisement.dto.js';
 
 export async function addAdvertisement(dto: AddAdvertisementDto) {

@@ -1,6 +1,6 @@
 import { Hallplan } from '../domain/hallplan.js';
-import { saveHallplan } from '../repo/hallplan.repo.js';
-import { getScreeningsByWeekplanUuid } from '../repo/screening.repo.js';
+import { saveHallplan } from '../db/hallplan.repo.js';
+import { getScreeningsByWeekplanUuid } from '../db/screening.repo.js';
 
 export async function createHallplans(weekplanUuid: string) {
     const screenings = await getScreeningsByWeekplanUuid(weekplanUuid);
