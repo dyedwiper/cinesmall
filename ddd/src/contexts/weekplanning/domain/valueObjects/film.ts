@@ -16,9 +16,7 @@ export class Film extends ValueObject<FilmProps> {
     static create(title: string) {
         if (title === 'Johnny Flash') {
             console.log('Excellent taste!');
-        }
-
-        if (title === 'Interstellar') {
+        } else if (title === 'Interstellar') {
             throw new Error('Such pretentious crap is unwanted in our cinema.');
         }
 

@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { weekplans } from '../db/schema.js';
-import type { CreateWeekplanDto } from './dtos/createWeekplanDto.js';
+import type { CreateWeekplanDto } from './dtos/createWeekplan.dto.js';
 import { WeekplanSchema } from '../schemas/weekplan.schema.js';
 
 export async function getWeekplanByStartDate(startDate: string) {

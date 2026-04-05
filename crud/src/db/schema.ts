@@ -1,4 +1,4 @@
-import { defineRelations, type InferSelectModel } from 'drizzle-orm';
+import { defineRelations } from 'drizzle-orm';
 import { date, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const weekplans = pgTable('weekplans', {
@@ -50,8 +50,3 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
         screening: r.one.screenings(),
     },
 }));
-
-export type Weekplan = InferSelectModel<typeof weekplans> & { screenings: Screening[] };
-export type Screening = InferSelectModel<typeof screenings> & { advertisements: Advertisement[] };
-export type Advertisement = InferSelectModel<typeof advertisements>;
-export type Hallplan = InferSelectModel<typeof hallplans>;

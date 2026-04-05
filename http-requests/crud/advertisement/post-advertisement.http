@@ -1,0 +1,7 @@
+POST http://localhost:2301/advertisement
+
+{
+    "screeningId": "1d09d114-77ee-4615-a620-c7ca5711bbeb",
+    "name": "Persico",
+    "duration": 5
+}
