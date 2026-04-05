@@ -7,13 +7,13 @@ interface HallplanCreateParams {
     id?: string;
     screeningId: string;
     hallNumber: number;
-    soldSeats?: string[];
+    reservedSeats?: string[];
 }
 
 interface HallplanProps extends EntityProps {
     screeningId: Id;
     hall: Hall;
-    soldSeats: string[];
+    reservedSeats: string[];
 }
 
 export class Hallplan extends AggregateRoot<HallplanProps> {
@@ -26,7 +26,7 @@ export class Hallplan extends AggregateRoot<HallplanProps> {
             id: Id.create(params.id),
             screeningId: Id.create(params.screeningId),
             hall: Hall.create(params.hallNumber),
-            soldSeats: params.soldSeats ?? [],
+            reservedSeats: params.reservedSeats ?? [],
         };
 
         return new Hallplan(props);
@@ -35,8 +35,8 @@ export class Hallplan extends AggregateRoot<HallplanProps> {
     reserveSeat(seat: string) {
         if (!this.props.hall.seats.includes(seat)) throw new Error('This seat does not exist in the hall.');
 
-        if (this.props.soldSeats.includes(seat)) throw new Error('This seat is already reserved.');
+        if (this.props.reservedSeats.includes(seat)) throw new Error('This seat is already reserved.');
 
-        this.props.soldSeats.push(seat);
+        this.props.reservedSeats.push(seat);
     }
 }

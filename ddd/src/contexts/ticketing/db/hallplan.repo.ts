@@ -18,8 +18,8 @@ export async function getHallplanById(id: string) {
     if (!result) throw new Error('Hallplan not found.');
 
     // TODO: Is there a better way to assert the type?
-    const soldSeats = result.soldSeats as string[];
-    const hallplan = Hallplan.create({ ...result, soldSeats });
+    const reservedSeats = result.reservedSeats as string[];
+    const hallplan = Hallplan.create({ ...result, reservedSeats });
 
     return hallplan;
 }

@@ -26,7 +26,7 @@ export const hallplans = pgTable('hallplans', {
     id: varchar().primaryKey().notNull(),
     screeningId: varchar('screening_id').notNull(),
     hallNumber: integer('hall_number').notNull(),
-    soldSeats: json('sold_seats'),
+    reservedSeats: json('reserved_seats'),
 });
 
 export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({
