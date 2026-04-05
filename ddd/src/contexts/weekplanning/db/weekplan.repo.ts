@@ -6,7 +6,7 @@ import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
 import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
 
-export async function getWeekplan(uuid: string) {
+export async function getWeekplanByUuid(uuid: string) {
     const data = await db.query.weekplans.findFirst({
         where: { uuid },
         with: { screenings: { with: { advertisements: true } } },
