@@ -1,3 +1,4 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "js/ts.tsdk.path": "/home/dyedwiper/repos/cinesmall/ddd/node_modules/typescript/lib"
 }
