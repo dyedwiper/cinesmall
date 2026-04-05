@@ -1,5 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
+import weekplanRoute from './routes/weekplan.route.js';
+import screeningRoute from './routes/screening.route.js';
 
 const app = new Hono();
 
@@ -7,8 +9,8 @@ app.get('/', async (c) => {
     return c.text('Success');
 });
 
-app.route('/weekplan', weekplan);
-app.route('/screening', screening);
+app.route('/weekplan', weekplanRoute);
+app.route('/screening', screeningRoute);
 
 serve(
     {

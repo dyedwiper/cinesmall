@@ -1,4 +1,4 @@
-POST http://localhost:2300/weekplanning/screening
+POST http://localhost:2301/screening
 
 {
     "weekplanId": "740983cf-3948-4f46-93d0-268dc393a98e",
