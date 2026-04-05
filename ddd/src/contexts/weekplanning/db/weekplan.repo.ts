@@ -7,24 +7,30 @@ import { Weekplan } from '../domain/weekplan.js';
 import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
 
 export async function getWeekplanById(id: string) {
-    const data = await db.query.weekplans.findFirst({
+    const result = await db.query.weekplans.findFirst({
         where: { id },
         with: { screenings: { with: { advertisements: true } } },
     });
 
-    if (!data) {
+    if (!result) {
         throw new Error('Weekplan not found.');
     }
 
     // TODO: Write a dedicated mapper, but how to type?
-    const screenings = data.screenings.map((sc) => {
+    const screenings = result.screenings.map((sc) => {
         const advertisements = sc.advertisements.map((ad) => Advertisement.create(ad));
 
         return Screening.create({ ...sc, advertisements });
     });
-    const weekplan = Weekplan.create({ startDate: data.startDate, screenings });
+    const weekplan = Weekplan.create({ startDate: result.startDate, screenings });
 
     return weekplan;
+}
+
+export async function existsWeekplanForStartDate(startDate: string) {
+    const result = await db.query.weekplans.findFirst({ where: { startDate } });
+
+    return !!result;
 }
 
 export async function getWeekplanIdByScreeningId(screeningId: string) {

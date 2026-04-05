@@ -26,7 +26,6 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
         super(props);
     }
 
-    // TODO: How to check if a weekplan for this startDate already exists?
     static create(params: WeekplanCreateParams) {
         const props = {
             id: Id.create(params.id),
