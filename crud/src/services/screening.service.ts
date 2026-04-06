@@ -1,10 +1,11 @@
+import { eq } from 'drizzle-orm';
 import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { screenings } from '../db/schema.js';
-import { ScreeningSchema } from '../validation/screening.schema.js';
-import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
-import type { CreateScreeningDto } from './dtos/createScreening.dto.js';
 import type { Screening, Weekplan } from '../db/types.js';
+import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
+import { ScreeningSchema } from '../validation/screening.schema.js';
+import type { CreateScreeningDto } from './dtos/createScreening.dto.js';
 
 export function getScreeningById(id: string) {
     const result = db.query.screenings.findFirst({ where: { id }, with: { advertisements: true, hallplans: true } });
@@ -34,6 +35,10 @@ export async function createScreening(dto: CreateScreeningDto) {
     checkForOverlappingScreenings(screening, weekplan);
 
     await db.insert(screenings).values(screening);
+}
+
+export async function deleteScreening(id: string) {
+    await db.delete(screenings).where(eq(screenings.id, id));
 }
 
 function checkIfDateBelongsToWeekplan(screening: Screening, weekplan: Weekplan) {

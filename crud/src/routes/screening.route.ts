@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { createScreening, getScreeningById } from '../services/screening.service.js';
+import { createScreening, deleteScreening, getScreeningById } from '../services/screening.service.js';
 
 const app = new Hono();
 
@@ -13,6 +13,13 @@ app.get('/:id', async (c) => {
 app.post('/', async (c) => {
     const body = await c.req.json();
     await createScreening(body);
+
+    return c.text('ok');
+});
+
+app.delete('/:id', async (c) => {
+    const id = c.req.param('id');
+    await deleteScreening(id);
 
     return c.text('ok');
 });
