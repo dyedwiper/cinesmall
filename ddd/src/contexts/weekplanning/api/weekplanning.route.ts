@@ -1,10 +1,18 @@
 import { Hono } from 'hono';
+import { getWeekplanDtoByStartDate } from '../db/weekplan.repo.js';
+import { addAdvertisement } from '../useCases/addAdvertisement.uc.js';
 import { addScreening } from '../useCases/addScreening.uc.js';
 import { createWeekplan } from '../useCases/createWeekplan.uc.js';
 import { removeScreening } from '../useCases/removeScreening.uc.js';
-import { addAdvertisement } from '../useCases/addAdvertisement.uc.js';
 
 const app = new Hono();
+
+app.get('/weekplan/:startDate', async (c) => {
+    const startDate = c.req.param('startDate');
+    const weekplan = await getWeekplanDtoByStartDate(startDate);
+
+    return c.json(weekplan);
+});
 
 app.post('/weekplan', async (c) => {
     const body = await c.req.json();

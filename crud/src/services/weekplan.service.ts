@@ -4,10 +4,19 @@ import { weekplans } from '../db/schema.js';
 import type { CreateWeekplanDto } from './dtos/createWeekplan.dto.js';
 import { WeekplanSchema } from '../validation/weekplan.schema.js';
 
-export async function getWeekplanByStartDate(startDate: string) {
+export async function getCompleteWeekplanByStartDate(startDate: string) {
     const result = await db.query.weekplans.findFirst({
         where: { startDate },
         with: { screenings: { with: { advertisements: true, hallplans: true } } },
+    });
+
+    return result;
+}
+
+export async function getWeekplanByStartDateWithoutAdvertisements(startDate: string) {
+    const result = await db.query.weekplans.findFirst({
+        where: { startDate },
+        with: { screenings: { with: { hallplans: true } } },
     });
 
     return result;

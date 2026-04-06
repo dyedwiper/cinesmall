@@ -6,6 +6,15 @@ import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
 import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
 
+export async function getWeekplanDtoByStartDate(startDate: string) {
+    const result = await db.query.weekplans.findFirst({
+        where: { startDate },
+        with: { screenings: { with: { advertisements: true, hallplans: true } } },
+    });
+
+    return result;
+}
+
 export async function getWeekplanById(id: string) {
     const result = await db.query.weekplans.findFirst({
         where: { id },

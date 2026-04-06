@@ -1,11 +1,22 @@
 import { Hono } from 'hono';
-import { createWeekplan, getWeekplanByStartDate } from '../services/weekplan.service.js';
+import {
+    createWeekplan,
+    getCompleteWeekplanByStartDate,
+    getWeekplanByStartDateWithoutAdvertisements,
+} from '../services/weekplan.service.js';
 
 const app = new Hono();
 
-app.get('/:startDate', async (c) => {
+app.get('/:startDate/complete', async (c) => {
     const startDate = c.req.param('startDate');
-    const weekplan = await getWeekplanByStartDate(startDate);
+    const weekplan = await getCompleteWeekplanByStartDate(startDate);
+
+    return c.json(weekplan);
+});
+
+app.get('/:startDate/without-advertisements', async (c) => {
+    const startDate = c.req.param('startDate');
+    const weekplan = await getWeekplanByStartDateWithoutAdvertisements(startDate);
 
     return c.json(weekplan);
 });
