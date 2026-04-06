@@ -15,6 +15,10 @@ export async function createAdvertisment(dto: CreateAdvertisementDto) {
 
     if (!screening) throw new Error('Screening not found.');
 
+    if (screening.advertisements.length >= 3) {
+        throw new Error('Max 3 advertisements per screening are allowed.');
+    }
+
     const weekplan = await db.query.weekplans.findFirst({
         where: { id: screening.weekplanId },
         with: { screenings: { with: { advertisements: true } } },
