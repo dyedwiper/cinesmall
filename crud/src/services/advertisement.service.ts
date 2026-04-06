@@ -3,7 +3,7 @@ import { db } from '../db/index.js';
 import { advertisements } from '../db/schema.js';
 import { AdvertisementSchema } from '../validation/advertisement.schema.js';
 import type { CreateAdvertisementDto } from './dtos/createAdvertisement.dto.js';
-import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
+import { checkForOverlappingScreenings } from '../validation/screening-overlap-check.js';
 
 export async function createAdvertisment(dto: CreateAdvertisementDto) {
     AdvertisementSchema.parse(dto);

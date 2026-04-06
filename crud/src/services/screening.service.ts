@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { screenings } from '../db/schema.js';
 import type { Screening, Weekplan } from '../db/types.js';
-import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
+import { checkForOverlappingScreenings } from '../validation/screening-overlap-check.js';
 import { ScreeningSchema } from '../validation/screening.schema.js';
 import type { CreateScreeningDto } from './dtos/createScreening.dto.js';
 
