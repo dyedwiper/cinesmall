@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { screenings } from '../db/schema.js';
-import { ScreeningSchema } from '../schemas/screening.schema.js';
+import { ScreeningSchema } from '../validation/screening.schema.js';
 import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
 import type { CreateScreeningDto } from './dtos/createScreening.dto.js';
 import type { Screening, Weekplan } from '../db/types.js';

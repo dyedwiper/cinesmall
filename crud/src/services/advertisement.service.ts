@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { advertisements } from '../db/schema.js';
-import { AdvertisementSchema } from '../schemas/advertisement.schema.js';
+import { AdvertisementSchema } from '../validation/advertisement.schema.js';
 import type { CreateAdvertisementDto } from './dtos/createAdvertisement.dto.js';
 import { checkForOverlappingScreenings } from '../utils/screening.utils.js';
 
