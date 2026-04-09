@@ -10,7 +10,7 @@ The domain is taken from the book [Domain Driven Transformation](https://dpunkt.
 
 ### Hints
 
-- As you see it is a German book. I don't like non-english words in the code though it is often recommended in DDD, so I translated the domain language.
+- As you see it is a German book. Though it is often recommended in DDD, I don't like non-english words in the code, so I translated the domain language.
 - I left out a few parts of the domain and added more detail to others.
 - A few business rules might differ slightly in the different apps. If so it is unintentionally and due to lack of time and need.
 
@@ -33,7 +33,7 @@ This takes a classical CRUD approach having one route and one service per resour
 #### Hints
 
 - In the weekplan route there are already two GET endpoints with unpleasantly specific paths and names of the respective service methods. With a growing domain such namings will get more tedious.
-- With the current domain the types inferred from the database tables are enough to work with, but with a growing domain we might need more specific types which could lead to tedious namings (like with the paths and methods above).
+- With the current domain the types inferred from the database tables are enough to work with, but with a growing domain one might need more specific types which could lead to tedious namings (like with the paths and methods above).
 
 ## Running and testing the apps
 
