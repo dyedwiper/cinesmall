@@ -5,7 +5,7 @@ import type { AddScreeningDto } from './dtos/addScreening.dto.js';
 export async function addScreening(dto: AddScreeningDto) {
     // authorization
 
-    const screening = Screening.create({ ...dto, date: new Date(dto.date) });
+    const screening = Screening.create(dto);
     const weekplan = await getWeekplanById(dto.weekplanId);
 
     weekplan.addScreening(screening);
