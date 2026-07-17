@@ -18,10 +18,6 @@ interface WeekplanProps extends EntityProps {
 }
 
 export class Weekplan extends AggregateRoot<WeekplanProps> {
-    get screenings() {
-        return this.props.screenings;
-    }
-
     private constructor(props: WeekplanProps) {
         super(props);
     }
