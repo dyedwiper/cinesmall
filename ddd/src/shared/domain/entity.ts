@@ -17,6 +17,6 @@ export abstract class Entity<T extends EntityProps> {
     }
 
     getProps(): T {
-        return this.props;
+        return { ...this.props };
     }
 }
