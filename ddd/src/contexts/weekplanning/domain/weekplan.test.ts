@@ -1,7 +1,5 @@
-import test, { describe } from 'node:test';
 import { Screening } from './screening.js';
 import { Weekplan } from './weekplan.js';
-import assert from 'node:assert';
 
 describe('addScreening', () => {
     test('adds a screening', () => {
@@ -16,7 +14,7 @@ describe('addScreening', () => {
 
         weekplan.addScreening(screening);
 
-        assert.strictEqual(weekplan.getProps().screenings.length, 1);
+        expect(weekplan.getProps().screenings).toHaveLength(1);
     });
 
     test('throws an error if screening date does not belong to weekplan', () => {
@@ -29,6 +27,6 @@ describe('addScreening', () => {
             duration: 90,
         });
 
-        assert.throws(() => weekplan.addScreening(screening));
+        expect(() => weekplan.addScreening(screening)).toThrow();
     });
 });
