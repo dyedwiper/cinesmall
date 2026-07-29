@@ -31,7 +31,7 @@ export async function getWeekplanById(id: string) {
 
         return Screening.create({ ...sc, advertisements });
     });
-    const weekplan = Weekplan.create({ startDate: result.startDate, screenings });
+    const weekplan = Weekplan.create({ ...result, screenings });
 
     return weekplan;
 }
@@ -69,7 +69,7 @@ export async function saveWeekplan(weekplan: Weekplan) {
             screenings.map((s) => s.id),
         );
 
-        await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.id, weekplan.id));
+        await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.id, id));
     } else {
         await db.insert(weekplans).values(mappedWeekplan);
     }
