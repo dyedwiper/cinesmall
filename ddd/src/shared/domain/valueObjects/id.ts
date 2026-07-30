@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { ValueObject } from './valueObject.js';
+import { ValueObject } from '../baseClasses/valueObject.js';
 
 interface IdProps {
     value: string;

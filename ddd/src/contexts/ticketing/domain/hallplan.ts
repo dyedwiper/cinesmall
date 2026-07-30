@@ -1,6 +1,6 @@
-import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
-import { type EntityProps } from '../../../shared/domain/entity.js';
-import { Id } from '../../../shared/domain/id.js';
+import { AggregateRoot } from '../../../shared/domain/baseClasses/aggregateRoot.js';
+import { type EntityProps } from '../../../shared/domain/baseClasses/entity.js';
+import { Id } from '../../../shared/domain/valueObjects/id.js';
 import { Hall } from './valueObjects.ts/hall.js';
 
 interface HallplanCreateParams {

@@ -1,4 +1,4 @@
-import { ValueObject } from '../../../../shared/domain/valueObject.js';
+import { ValueObject } from '../../../../shared/domain/baseClasses/valueObject.js';
 
 interface HallProps {
     number: number;

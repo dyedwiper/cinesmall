@@ -1,10 +1,9 @@
-import crypto from 'node:crypto';
-import { AggregateRoot } from '../../../shared/domain/aggregateRoot.js';
+import { AggregateRoot } from '../../../shared/domain/baseClasses/aggregateRoot.js';
+import type { EntityProps } from '../../../shared/domain/baseClasses/entity.js';
+import { Id } from '../../../shared/domain/valueObjects/id.js';
 import type { Advertisement } from './advertisement.js';
 import type { Screening } from './screening.js';
 import { StartDate } from './valueObjects/startDate.js';
-import type { EntityProps } from '../../../shared/domain/entity.js';
-import { Id } from '../../../shared/domain/id.js';
 
 interface WeekplanCreateParams {
     id?: string;

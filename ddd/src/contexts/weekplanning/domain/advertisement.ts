@@ -1,5 +1,5 @@
-import { Entity, type EntityProps } from '../../../shared/domain/entity.js';
-import { Id } from '../../../shared/domain/id.js';
+import { Entity, type EntityProps } from '../../../shared/domain/baseClasses/entity.js';
+import { Id } from '../../../shared/domain/valueObjects/id.js';
 import { Duration } from './valueObjects/duration.js';
 
 interface AdvertisementCreateParams {
