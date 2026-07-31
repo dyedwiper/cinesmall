@@ -13,7 +13,7 @@
         "pg": "^8.20.0"
     },
     "devDependencies": {
-        "@types/node": "^20.11.17",
+        "@types/node": "^24.1.0",
         "@types/pg": "^8.20.0",
         "drizzle-kit": "^1.0.0-beta.20",
         "prettier": "^3.8.1",
