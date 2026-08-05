@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import ticketing from './contexts/ticketing/shell/http/ticketing.route.js';
-import weekplanning from './contexts/weekplanning/shell/http/weekplanning.route.js';
+import ticketing from './contexts/ticketing/shell/routes/ticketing.route.js';
+import weekplanning from './contexts/weekplanning/shell/routes/weekplanning.route.js';
 
 const app = new Hono();
 
