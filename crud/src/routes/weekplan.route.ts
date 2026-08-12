@@ -23,7 +23,7 @@ app.get('/:startDate/without-advertisements', async (c) => {
 
 app.post('/', async (c) => {
     const body = await c.req.json();
-    await createWeekplan(body.startDate);
+    await createWeekplan(body);
 
     return c.text('ok');
 });
