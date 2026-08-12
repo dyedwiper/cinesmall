@@ -1,44 +1,44 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { date, integer, json, snakeCase, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 const timestamps = {
-    createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true })
+    createdAt: timestamp({ mode: 'string', withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp({ mode: 'string', withTimezone: true })
         .notNull()
         .defaultNow()
         .$onUpdate(() => new Date().toISOString()),
 };
 
-export const weekplans = pgTable('weekplans', {
+export const weekplans = snakeCase.table('weekplans', {
     id: varchar().primaryKey().notNull(),
     ...timestamps,
     startDate: date().notNull(),
 });
 
-export const screenings = pgTable('screenings', {
+export const screenings = snakeCase.table('screenings', {
     id: varchar().primaryKey().notNull(),
     ...timestamps,
-    weekplanId: varchar('weekplan_id').notNull(),
+    weekplanId: varchar().notNull(),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
-    hallNumber: integer('hall_number').notNull(),
+    hallNumber: integer().notNull(),
     film: varchar().notNull(),
     duration: integer().notNull(),
 });
 
-export const advertisements = pgTable('advertisements', {
+export const advertisements = snakeCase.table('advertisements', {
     id: varchar().primaryKey().notNull(),
     ...timestamps,
-    screeningId: varchar('screening_id').notNull(),
+    screeningId: varchar().notNull(),
     name: varchar().notNull(),
     duration: integer().notNull(),
 });
 
-export const hallplans = pgTable('hallplans', {
+export const hallplans = snakeCase.table('hallplans', {
     id: varchar().primaryKey().notNull(),
     ...timestamps,
-    screeningId: varchar('screening_id').notNull(),
-    hallNumber: integer('hall_number').notNull(),
-    reservedSeats: json('reserved_seats'),
+    screeningId: varchar().notNull(),
+    hallNumber: integer().notNull(),
+    reservedSeats: json(),
 });
 
 export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({

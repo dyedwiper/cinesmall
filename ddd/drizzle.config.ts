@@ -9,5 +9,6 @@ export default defineConfig({
         user: process.env.PGUSER!,
         password: process.env.PGPASSWORD!,
         database: process.env.PGDATABASE!,
+        ssl: false,
     },
 });

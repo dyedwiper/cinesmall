@@ -1,32 +1,44 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { date, integer, json, snakeCase, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-export const weekplans = pgTable('weekplans', {
+const timestamps = {
+    createdAt: timestamp({ mode: 'string', withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp({ mode: 'string', withTimezone: true })
+        .notNull()
+        .defaultNow()
+        .$onUpdate(() => new Date().toISOString()),
+};
+
+export const weekplans = snakeCase.table('weekplans', {
     id: varchar().primaryKey().notNull(),
+    ...timestamps,
     startDate: date().notNull(),
 });
 
-export const screenings = pgTable('screenings', {
+export const screenings = snakeCase.table('screenings', {
     id: varchar().primaryKey().notNull(),
-    weekplanId: varchar('weekplan_id').notNull(),
+    ...timestamps,
+    weekplanId: varchar().notNull(),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
-    hallNumber: integer('hall_number').notNull(),
+    hallNumber: integer().notNull(),
     film: varchar().notNull(),
     duration: integer().notNull(),
 });
 
-export const advertisements = pgTable('advertisements', {
+export const advertisements = snakeCase.table('advertisements', {
     id: varchar().primaryKey().notNull(),
-    screeningId: varchar('screening_id').notNull(),
+    ...timestamps,
+    screeningId: varchar().notNull(),
     name: varchar().notNull(),
     duration: integer().notNull(),
 });
 
-export const hallplans = pgTable('hallplans', {
+export const hallplans = snakeCase.table('hallplans', {
     id: varchar().primaryKey().notNull(),
-    screeningId: varchar('screening_id').notNull(),
-    hallNumber: integer('hall_number').notNull(),
-    reservedSeats: json('reserved_seats'),
+    ...timestamps,
+    screeningId: varchar().notNull(),
+    hallNumber: integer().notNull(),
+    reservedSeats: json(),
 });
 
 export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({
