@@ -39,7 +39,7 @@ This takes a classical CRUD approach having one route and one service per resour
 
 All of the apps are working.
 
-To run them you need a Postgres database. Here is a guide how to set it up locally: https://orm.drizzle.team/docs/guides/postgresql-local-setup. After setting it up, you need to create an .env file in each app's folder with `DATABASE_URL` set to the connection string.
+To run them you need a Postgres database. Here is a guide how to set it up locally: https://orm.drizzle.team/docs/guides/postgresql-local-setup. After setting it up, you need to create an .env file with the connection details. The file .env.example gives orientation how it should look like.
 
 Then you just need to go the respective folder, run `npm i` and `npm run dev`.
 
