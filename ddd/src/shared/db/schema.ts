@@ -62,3 +62,12 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
         screening: r.one.screenings(),
     },
 }));
+
+export type SelectWeekplan = typeof weekplans.$inferSelect & { screenings?: SelectScreening[] };
+export type InsertWeekplan = typeof weekplans.$inferInsert;
+
+export type SelectScreening = typeof screenings.$inferSelect & { advertisements?: SelectAdvertisement[] };
+export type InsertScreening = typeof screenings.$inferInsert;
+
+export type SelectAdvertisement = typeof advertisements.$inferSelect;
+export type InsertAdvertisement = typeof advertisements.$inferInsert;
