@@ -12,8 +12,6 @@ import type { Weekplan } from '../domain/weekplan.js';
 import type { GetWeekplanDto } from '../useCases/dtos/getWeekplan.dto.js';
 
 export function mapWeekplanToDto(weekplan: SelectWeekplan): GetWeekplanDto {
-    console.log(weekplan);
-
     const mapped = {
         id: weekplan.id,
         startDate: weekplan.startDate,
@@ -24,8 +22,6 @@ export function mapWeekplanToDto(weekplan: SelectWeekplan): GetWeekplanDto {
 }
 
 function mapScreeningToDto(screening: SelectScreening) {
-    console.log(screening);
-
     const mapped = {
         id: screening.id,
         date: screening.date,

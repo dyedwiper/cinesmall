@@ -53,7 +53,7 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
             from: r.screenings.id,
             to: r.advertisements.screeningId,
         }),
-        hallplans: r.many.hallplans({
+        hallplan: r.one.hallplans({
             from: r.screenings.id,
             to: r.hallplans.screeningId,
         }),
@@ -66,8 +66,14 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
 export type SelectWeekplan = typeof weekplans.$inferSelect & { screenings?: SelectScreening[] };
 export type InsertWeekplan = typeof weekplans.$inferInsert;
 
-export type SelectScreening = typeof screenings.$inferSelect & { advertisements?: SelectAdvertisement[] };
+export type SelectScreening = typeof screenings.$inferSelect & { advertisements?: SelectAdvertisement[] } & {
+    // TODO: Drizzle somehow types the return for one-relation with null instead of undefined. Open an issue!
+    hallplan?: SelectHallplan | null;
+};
 export type InsertScreening = typeof screenings.$inferInsert;
 
 export type SelectAdvertisement = typeof advertisements.$inferSelect;
 export type InsertAdvertisement = typeof advertisements.$inferInsert;
+
+export type SelectHallplan = typeof hallplans.$inferSelect;
+export type InsertHallplan = typeof hallplans.$inferInsert;
