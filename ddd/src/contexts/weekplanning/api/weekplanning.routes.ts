@@ -4,6 +4,7 @@ import { addScreening } from '../useCases/addScreening.uc.js';
 import { createWeekplan } from '../useCases/createWeekplan.uc.js';
 import { getWeekplanByStartDate } from '../useCases/getWeekplanByStartDate.uc.js';
 import { removeScreening } from '../useCases/removeScreening.uc.js';
+import { createFilm } from '../useCases/createFilm.uc.js';
 
 const app = new Hono();
 
@@ -17,6 +18,13 @@ app.get('/weekplan/:startDate', async (c) => {
 app.post('/weekplan', async (c) => {
     const body = await c.req.json();
     await createWeekplan(body);
+
+    return c.text('ok');
+});
+
+app.post('film', async (c) => {
+    const body = await c.req.json();
+    await createFilm(body);
 
     return c.text('ok');
 });

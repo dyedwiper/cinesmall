@@ -21,9 +21,15 @@ export const screenings = snakeCase.table('screenings', {
     id,
     ...timestamps,
     weekplanId: uuid().notNull(),
+    filmId: uuid().notNull(),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
     hallNumber: integer().notNull(),
-    film: varchar().notNull(),
+});
+
+export const films = snakeCase.table('films', {
+    id: uuid().primaryKey(),
+    ...timestamps,
+    title: varchar().notNull(),
     duration: integer().notNull(),
 });
 
@@ -43,7 +49,7 @@ export const hallplans = snakeCase.table('hallplans', {
     reservedSeats: json(),
 });
 
-export const relations = defineRelations({ weekplans, screenings, advertisements, hallplans }, (r) => ({
+export const relations = defineRelations({ weekplans, screenings, films, advertisements, hallplans }, (r) => ({
     weekplans: {
         screenings: r.many.screenings({
             from: r.weekplans.id,
@@ -54,6 +60,11 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
         advertisements: r.many.advertisements({
             from: r.screenings.id,
             to: r.advertisements.screeningId,
+        }),
+        film: r.one.films({
+            from: r.screenings.filmId,
+            to: r.films.id,
+            optional: false,
         }),
         hallplan: r.one.hallplans({
             from: r.screenings.id,
@@ -68,11 +79,16 @@ export const relations = defineRelations({ weekplans, screenings, advertisements
 export type SelectWeekplan = typeof weekplans.$inferSelect & { screenings?: SelectScreening[] };
 export type InsertWeekplan = typeof weekplans.$inferInsert;
 
-export type SelectScreening = typeof screenings.$inferSelect & { advertisements?: SelectAdvertisement[] } & {
+export type SelectScreening = typeof screenings.$inferSelect & { film: SelectFilm } & {
+    advertisements?: SelectAdvertisement[];
+} & {
     // TODO: Watch issue regarding null and undefined: https://github.com/drizzle-team/drizzle-orm/issues/2745
     hallplan?: SelectHallplan | null;
 };
 export type InsertScreening = typeof screenings.$inferInsert;
+
+export type SelectFilm = typeof films.$inferSelect;
+export type InsertFilm = typeof films.$inferInsert;
 
 export type SelectAdvertisement = typeof advertisements.$inferSelect;
 export type InsertAdvertisement = typeof advertisements.$inferInsert;

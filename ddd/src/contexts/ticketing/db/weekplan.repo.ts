@@ -4,7 +4,7 @@ import { mapWeekplanToDto } from './weekplan.mapper.js';
 export async function getWeekplanByStartDate(startDate: string) {
     const weekplan = await db.query.weekplans.findFirst({
         where: { startDate },
-        with: { screenings: { with: { hallplan: true } } },
+        with: { screenings: { with: { film: true, hallplan: true } } },
     });
 
     if (!weekplan) throw new Error('Weekplan not found.');

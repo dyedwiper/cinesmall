@@ -8,7 +8,7 @@ interface ScreeningDto {
     id: string;
     date: string;
     hallNumber: number;
-    film: string;
+    filmTitle: string;
     duration: number;
     advertisements: AdvertisementDto[];
 }

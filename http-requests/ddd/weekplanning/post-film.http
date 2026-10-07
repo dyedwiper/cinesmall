@@ -1,0 +1,6 @@
+POST http://localhost:2300/weekplanning/film
+
+{
+    "title": "Johnny Flash",
+    "duration": 90
+}

@@ -10,7 +10,7 @@ import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb, mapWeekplanToD
 export async function getWeekplanDtoByStartDate(startDate: string): Promise<GetWeekplanDto> {
     const result = await db.query.weekplans.findFirst({
         where: { startDate },
-        with: { screenings: { with: { advertisements: true } } },
+        with: { screenings: { with: { film: true, advertisements: true } } },
     });
 
     if (!result) {

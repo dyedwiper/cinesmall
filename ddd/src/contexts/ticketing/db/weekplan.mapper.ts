@@ -16,8 +16,8 @@ function mapScreeningToDto(screening: SelectScreening) {
         id: screening.id,
         date: screening.date,
         hallNumber: screening.hallNumber,
-        film: screening.film,
-        duration: screening.duration,
+        filmTitle: screening.film.title,
+        duration: screening.film.duration,
         hallplanId: screening.hallplan?.id,
     };
 

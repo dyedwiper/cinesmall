@@ -26,8 +26,8 @@ function mapScreeningToDto(screening: SelectScreening) {
         id: screening.id,
         date: screening.date,
         hallNumber: screening.hallNumber,
-        film: screening.film,
-        duration: screening.duration,
+        filmTitle: screening.film.title,
+        duration: screening.film.duration,
         advertisements: screening.advertisements?.map((ad) => mapAdvertisementToDto(ad)) ?? [],
     };
 
@@ -56,15 +56,14 @@ export function mapWeekplanToDb(weekplan: Weekplan): InsertWeekplan {
 }
 
 export function mapScreeningToDb(screening: Screening): InsertScreening {
-    const { id, weekplanId, date, hallNumber, film, duration } = screening.getProps();
+    const { id, weekplanId, filmId, date, hallNumber } = screening.getProps();
 
     const mapped = {
         id: id.value,
         weekplanId: weekplanId.value,
+        filmId: filmId.value,
         date: date.toISOString(),
         hallNumber: hallNumber.value,
-        film: film.title,
-        duration: duration.value,
     };
 
     return mapped;
