@@ -67,7 +67,7 @@ export type SelectWeekplan = typeof weekplans.$inferSelect & { screenings?: Sele
 export type InsertWeekplan = typeof weekplans.$inferInsert;
 
 export type SelectScreening = typeof screenings.$inferSelect & { advertisements?: SelectAdvertisement[] } & {
-    // TODO: Drizzle somehow types the return for one-relation with null instead of undefined. Open an issue!
+    // TODO: Watch issue regarding null and undefined: https://github.com/drizzle-team/drizzle-orm/issues/2745
     hallplan?: SelectHallplan | null;
 };
 export type InsertScreening = typeof screenings.$inferInsert;
