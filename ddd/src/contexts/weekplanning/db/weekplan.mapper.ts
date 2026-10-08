@@ -56,12 +56,12 @@ export function mapWeekplanToDb(weekplan: Weekplan): InsertWeekplan {
 }
 
 export function mapScreeningToDb(screening: Screening): InsertScreening {
-    const { id, weekplanId, filmId, date, hallNumber } = screening.getProps();
+    const { id, weekplanId, film, date, hallNumber } = screening.getProps();
 
     const mapped = {
         id: id.value,
         weekplanId: weekplanId.value,
-        filmId: filmId.value,
+        filmId: film.id,
         date: date.toISOString(),
         hallNumber: hallNumber.value,
     };

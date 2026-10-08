@@ -16,6 +16,10 @@ interface FilmProps extends EntityProps {
 }
 
 export class Film extends AggregateRoot<FilmProps> {
+    get duration() {
+        return this.props.duration.value;
+    }
+
     static create(params: CreateFilmParams) {
         const props = {
             id: Id.create(),

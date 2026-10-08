@@ -1,12 +1,13 @@
 import { Entity, type EntityProps } from '../../../shared/domain/baseClasses/entity.js';
 import { Id } from '../../../shared/domain/valueObjects/id.js';
 import type { Advertisement } from './advertisement.js';
+import type { Film } from './film.js';
 import { HallNumber } from './valueObjects/hallNumber.js';
 
 interface ScreeningCreateParams {
     id?: string;
     weekplanId: string;
-    filmId: string;
+    film: Film;
     date: string;
     hallNumber: number;
     advertisements?: Advertisement[];
@@ -14,7 +15,7 @@ interface ScreeningCreateParams {
 
 interface ScreeningProps extends EntityProps {
     weekplanId: Id;
-    filmId: Id;
+    film: Film;
     date: Date;
     hallNumber: HallNumber;
     advertisements: Advertisement[];
@@ -23,6 +24,10 @@ interface ScreeningProps extends EntityProps {
 export class Screening extends Entity<ScreeningProps> {
     get date() {
         return this.props.date;
+    }
+
+    get film() {
+        return this.props.film;
     }
 
     get hallNumber() {
@@ -41,7 +46,7 @@ export class Screening extends Entity<ScreeningProps> {
         const props = {
             id: Id.create(params.id),
             weekplanId: Id.create(params.weekplanId),
-            filmId: Id.create(params.filmId),
+            film: params.film,
             date: new Date(params.date),
             hallNumber: HallNumber.create(params.hallNumber),
             advertisements: params.advertisements ?? [],

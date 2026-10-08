@@ -76,8 +76,8 @@ export class Weekplan extends AggregateRoot<WeekplanProps> {
 
         const time1 = screening1.date.getTime();
         const time2 = screening2.date.getTime();
-        const duration1InMs = screening1.duration * 60 * 1000;
-        const duration2InMs = screening2.duration * 60 * 1000;
+        const duration1InMs = screening1.film.duration * 60 * 1000;
+        const duration2InMs = screening2.film.duration * 60 * 1000;
         const durationOfAds1InMs = this.computeDurationOfAdvertisements(screening1) * 60 * 1000;
         const durationOfAds2InMs = this.computeDurationOfAdvertisements(screening2) * 60 * 1000;
 

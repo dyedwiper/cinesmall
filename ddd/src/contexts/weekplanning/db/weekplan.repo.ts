@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../../shared/db/index.js';
 import { advertisements, screenings, weekplans } from '../../../shared/db/schema.js';
 import { Advertisement } from '../domain/advertisement.js';
+import { Film } from '../domain/film.js';
 import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
 import type { GetWeekplanDto } from '../useCases/dtos/getWeekplan.dto.js';
@@ -25,7 +26,7 @@ export async function getWeekplanDtoByStartDate(startDate: string): Promise<GetW
 export async function getWeekplanById(id: string) {
     const result = await db.query.weekplans.findFirst({
         where: { id },
-        with: { screenings: { with: { advertisements: true } } },
+        with: { screenings: { with: { film: true, advertisements: true } } },
     });
 
     if (!result) {
@@ -34,9 +35,10 @@ export async function getWeekplanById(id: string) {
 
     // TODO: Write a dedicated mapper, but how to type?
     const screenings = result.screenings.map((sc) => {
+        const film = Film.create(sc.film);
         const advertisements = sc.advertisements.map((ad) => Advertisement.create(ad));
 
-        return Screening.create({ ...sc, advertisements });
+        return Screening.create({ ...sc, film, advertisements });
     });
     const weekplan = Weekplan.create({ ...result, screenings });
 
