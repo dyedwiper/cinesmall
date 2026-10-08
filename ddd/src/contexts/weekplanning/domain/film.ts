@@ -22,7 +22,7 @@ export class Film extends AggregateRoot<FilmProps> {
 
     static create(params: CreateFilmParams) {
         const props = {
-            id: Id.create(),
+            id: Id.create(params.id),
             title: FilmTitle.create(params.title),
             duration: Duration.create(params.duration),
         };
