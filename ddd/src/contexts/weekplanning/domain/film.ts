@@ -2,7 +2,7 @@ import { AggregateRoot } from '../../../shared/domain/baseClasses/aggregateRoot.
 import { type EntityProps } from '../../../shared/domain/baseClasses/entity.js';
 import { Id } from '../../../shared/domain/valueObjects/id.js';
 import { Duration } from './valueObjects/duration.js';
-import { FilmTitle } from './valueObjects/film.js';
+import { FilmTitle } from './valueObjects/filmTitle.js';
 
 interface CreateFilmParams {
     id?: string;
