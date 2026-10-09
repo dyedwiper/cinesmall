@@ -6,7 +6,6 @@ export default defineProject({
             {
                 test: {
                     name: 'Integration Tests',
-                    globals: true,
                     include: [`**/*.int-test.ts`],
                     setupFiles: 'src/shared/test/dbSetup.ts',
                 },
@@ -14,7 +13,6 @@ export default defineProject({
             {
                 test: {
                     name: 'Unit Tests',
-                    globals: true,
                     include: [`**/*.test.ts`],
                 },
             },
