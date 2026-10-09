@@ -1,5 +1,7 @@
+import { eq } from 'drizzle-orm';
 import { db } from '../../../shared/db/index.js';
 import { films } from '../../../shared/db/schema.js';
+import { Id } from '../../../shared/domain/valueObjects/id.js';
 import { Film } from '../domain/film.js';
 
 export async function getFilmById(id: string) {
@@ -24,4 +26,8 @@ export async function saveFilm(film: Film) {
     };
 
     await db.insert(films).values(mapped);
+}
+
+export async function savePoster(filmId: string, file: Buffer) {
+    await db.update(films).set({ poster: file }).where(eq(films.id, filmId));
 }

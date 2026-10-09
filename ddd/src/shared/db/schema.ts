@@ -1,5 +1,5 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, json, snakeCase, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { bytea, date, integer, json, snakeCase, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 const id = uuid().primaryKey();
 
@@ -31,6 +31,7 @@ export const films = snakeCase.table('films', {
     ...timestamps,
     title: varchar().notNull(),
     duration: integer().notNull(),
+    poster: bytea(),
 });
 
 export const advertisements = snakeCase.table('advertisements', {
