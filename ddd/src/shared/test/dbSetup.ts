@@ -9,11 +9,11 @@ process.loadEnvFile();
 
 const dbName = `cinesmall-test-${crypto.randomUUID()}`;
 
-const pool1 = new Pool();
-await pool1.query(`CREATE DATABASE "${dbName}" TEMPLATE "cinesmall-test-template";`);
+const adminPool = new Pool();
+await adminPool.query(`CREATE DATABASE "${dbName}" TEMPLATE "cinesmall-test-template";`);
 
-const pool2 = new Pool({ database: dbName });
-const db = drizzle({ client: pool2, relations: schema.relations });
+const testPool = new Pool({ database: dbName });
+const db = drizzle({ client: testPool, relations: schema.relations });
 
 vi.doMock(import('../db/index.js'), async () => ({ db }));
 
@@ -24,6 +24,6 @@ afterEach(async () => {
 afterAll(async () => {
     db.$client.end();
 
-    await pool1.query(`DROP DATABASE "${dbName}";`);
-    await pool1.end();
+    await adminPool.query(`DROP DATABASE "${dbName}";`);
+    await adminPool.end();
 });
