@@ -1,3 +1,4 @@
+import { pushSchema } from 'drizzle-kit/api-postgres';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { reset } from 'drizzle-seed';
 import crypto from 'node:crypto';
@@ -10,10 +11,11 @@ process.loadEnvFile();
 const dbName = `cinesmall-test-${crypto.randomUUID()}`;
 
 const adminPool = new Pool();
-await adminPool.query(`CREATE DATABASE "${dbName}" TEMPLATE "cinesmall-test-template";`);
+await adminPool.query(`CREATE DATABASE "${dbName}";`);
 
 const testPool = new Pool({ database: dbName });
 const db = drizzle({ client: testPool, relations: schema.relations });
+await (await pushSchema(schema, db)).apply();
 
 vi.doMock(import('../db/index.js'), async () => ({ db }));
 
@@ -22,8 +24,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-    db.$client.end();
-
+    await testPool.end();
     await adminPool.query(`DROP DATABASE "${dbName}";`);
     await adminPool.end();
 });
