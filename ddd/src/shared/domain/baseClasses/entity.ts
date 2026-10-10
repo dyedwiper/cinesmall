@@ -1,4 +1,4 @@
-import type { Id } from '../id.js';
+import type { Id } from '../valueObjects/id.js';
 
 export interface EntityProps {
     id: Id;
