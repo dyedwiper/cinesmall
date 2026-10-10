@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from '../db/schema.js';
 
+// This name must be the same as PGDATABASE in .env.test
 const testDbName = `cinesmall-test`;
 
 export async function setup() {
