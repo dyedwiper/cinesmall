@@ -4,15 +4,22 @@ import { advertisements, screenings, weekplans } from '../../../shared/db/schema
 import { Advertisement } from '../domain/advertisement.js';
 import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
-import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb } from './weekplan.mapper.js';
+import type { GetWeekplanDto } from '../useCases/dtos/getWeekplan.dto.js';
+import { mapAdvertisementToDb, mapScreeningToDb, mapWeekplanToDb, mapWeekplanToDto } from './weekplan.mapper.js';
 
-export async function getWeekplanDtoByStartDate(startDate: string) {
+export async function getWeekplanDtoByStartDate(startDate: string): Promise<GetWeekplanDto> {
     const result = await db.query.weekplans.findFirst({
         where: { startDate },
         with: { screenings: { with: { advertisements: true } } },
     });
 
-    return result;
+    if (!result) {
+        throw new Error('Weekplan not found.');
+    }
+
+    const dto = mapWeekplanToDto(result);
+
+    return dto;
 }
 
 export async function getWeekplanById(id: string) {

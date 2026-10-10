@@ -2,14 +2,17 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../../shared/db/index.js';
 import { hallplans } from '../../../shared/db/schema.js';
 import { Hallplan } from '../domain/hallplan.js';
-import { mapHallplanToDb } from './hallplan.mapper.js';
+import { mapHallplanToDb, mapHallplanToDto } from './hallplan.mapper.js';
+import type { getHallplanDto } from '../useCases/dtos/getHallplan.dto.js';
 
-export async function getHallplanDtoById(id: string) {
+export async function getHallplanDtoById(id: string): Promise<getHallplanDto> {
     const result = await db.query.hallplans.findFirst({ where: { id }, with: { screening: true } });
 
     if (!result) throw new Error('Hallplan not found.');
 
-    return result;
+    const dto = mapHallplanToDto(result);
+
+    return dto;
 }
 
 export async function getHallplanById(id: string) {
