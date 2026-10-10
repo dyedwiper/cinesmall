@@ -1,5 +1,7 @@
 import { defineRelations } from 'drizzle-orm';
-import { date, integer, json, snakeCase, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { date, integer, json, snakeCase, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+
+const id = uuid().primaryKey();
 
 const timestamps = {
     createdAt: timestamp({ mode: 'string', withTimezone: true }).notNull().defaultNow(),
@@ -10,15 +12,15 @@ const timestamps = {
 };
 
 export const weekplans = snakeCase.table('weekplans', {
-    id: varchar().primaryKey().notNull(),
+    id,
     ...timestamps,
     startDate: date().notNull(),
 });
 
 export const screenings = snakeCase.table('screenings', {
-    id: varchar().primaryKey().notNull(),
+    id,
     ...timestamps,
-    weekplanId: varchar().notNull(),
+    weekplanId: uuid().notNull(),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
     hallNumber: integer().notNull(),
     film: varchar().notNull(),
@@ -26,17 +28,17 @@ export const screenings = snakeCase.table('screenings', {
 });
 
 export const advertisements = snakeCase.table('advertisements', {
-    id: varchar().primaryKey().notNull(),
+    id,
     ...timestamps,
-    screeningId: varchar().notNull(),
+    screeningId: uuid().notNull(),
     name: varchar().notNull(),
     duration: integer().notNull(),
 });
 
 export const hallplans = snakeCase.table('hallplans', {
-    id: varchar().primaryKey().notNull(),
+    id,
     ...timestamps,
-    screeningId: varchar().notNull(),
+    screeningId: uuid().notNull(),
     hallNumber: integer().notNull(),
     reservedSeats: json(),
 });

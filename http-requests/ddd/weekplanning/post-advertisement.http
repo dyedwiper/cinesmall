@@ -1,7 +1,7 @@
 POST http://localhost:2300/weekplanning/advertisement
 
 {
-    "screeningId": "1d09d114-77ee-4615-a620-c7ca5711bbeb",
+    "screeningId": "ae4982e3-e4ea-4f8f-960b-a3c9b3acef5c",
     "name": "Persico",
     "duration": 5
 }
