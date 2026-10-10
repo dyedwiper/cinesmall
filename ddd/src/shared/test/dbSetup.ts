@@ -22,8 +22,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-    db.$client.end();
-
+    await testPool.end();
     await adminPool.query(`DROP DATABASE "${dbName}";`);
     await adminPool.end();
 });
