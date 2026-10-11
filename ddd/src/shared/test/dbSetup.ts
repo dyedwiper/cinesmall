@@ -17,6 +17,7 @@ const testPool = new Pool({ database: dbName });
 const db = drizzle({ client: testPool, relations: schema.relations });
 await (await pushSchema(schema, db)).apply();
 
+// Inspired by https://github.com/drizzle-team/drizzle-orm/issues/4205
 vi.doMock(import('../db/index.js'), async () => ({ db }));
 
 afterEach(async () => {
