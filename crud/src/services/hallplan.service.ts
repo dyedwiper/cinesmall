@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { seatsInHall1, seatsInHall2 } from '../constants.js';
 import { db } from '../db/index.js';
 import { hallplans } from '../db/schema.js';
-import type { Hallplan, Screening } from '../db/types.js';
+import type { SelectHallplan, SelectScreening } from '../db/types.js';
 
 export async function createHallplans(weekplanId: string) {
     const weekplan = await db.query.weekplans.findFirst({ where: { id: weekplanId }, with: { screenings: true } });
@@ -30,7 +30,7 @@ export async function reserveSeats(hallplanId: string, seats: string[]) {
     await db.update(hallplans).set({ reservedSeats }).where(eq(hallplans.id, hallplanId));
 }
 
-async function createHallplan(screening: Screening) {
+async function createHallplan(screening: SelectScreening) {
     const hallplan = {
         id: crypto.randomUUID().toString(),
         screeningId: screening.id,
@@ -41,7 +41,7 @@ async function createHallplan(screening: Screening) {
     await db.insert(hallplans).values(hallplan);
 }
 
-function checkIfSeatExistInHall(hallplan: Hallplan, seat: string) {
+function checkIfSeatExistInHall(hallplan: SelectHallplan, seat: string) {
     if (hallplan.hallNumber === 1) {
         if (!seatsInHall1.includes(seat)) {
             throw new Error('This seat does not exist in the hall.');

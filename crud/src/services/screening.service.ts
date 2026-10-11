@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import crypto from 'node:crypto';
 import { db } from '../db/index.js';
 import { screenings } from '../db/schema.js';
-import type { Screening, Weekplan } from '../db/types.js';
+import type { InsertScreening, SelectWeekplan } from '../db/types.js';
 import { checkForOverlappingScreenings } from '../validation/screening-overlap-check.js';
 import { ScreeningSchema } from '../validation/screening.schema.js';
 import type { CreateScreeningDto } from './dtos/createScreening.dto.js';
@@ -41,7 +41,7 @@ export async function deleteScreening(id: string) {
     await db.delete(screenings).where(eq(screenings.id, id));
 }
 
-function checkIfDateBelongsToWeekplan(screening: Screening, weekplan: Weekplan) {
+function checkIfDateBelongsToWeekplan(screening: InsertScreening, weekplan: SelectWeekplan) {
     const startOfWeek = new Date(weekplan.startDate).getTime();
     const endOfWeek = startOfWeek + 7 * 24 * 60 * 60 * 1000;
 
