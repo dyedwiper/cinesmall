@@ -3,6 +3,8 @@ import { defineProject } from 'vitest/config';
 
 export default defineProject({
     test: {
+        // maxWorkers is specified to make measurements of test duration more consistent
+        maxWorkers: 4,
         projects: [
             {
                 test: {
