@@ -4,7 +4,7 @@ For a new TypeScript project I recently had to come up with a concept for integr
 - [Drizzle](https://orm.drizzle.team/) as ORM framework
 - [Vitest](https://vitest.dev/) as testing framework
 
-I didn't find much on the topic but the article [How to Test Your Node.js & Postgres App Using Drizzle & PGlite](https://dev.to/danielubenjamin/how-to-test-your-nodejs-postgres-app-using-drizzle-pglite-4fb3). So I took it as a starting point and implemented a POC with PGlite but wasn't really happy with it because it seemed quite slow. I then thought about [Testcontainers](https://testcontainers.com/) which was discouraged in the article though and also to me, creating throwaway containers sounded like a lot of overhead. Then a friend had the idea to create throwaway databases in a running PostgreSQL instance instead. I liked the idea as it sounded less cumbersome.
+I didn't find much on the topic but the article [How to Test Your Node.js & Postgres App Using Drizzle & PGlite](https://dev.to/danielubenjamin/how-to-test-your-nodejs-postgres-app-using-drizzle-pglite-4fb3). So I took it as a starting point and implemented a POC with PGlite but wasn't really happy with it because it seemed quite slow. I then thought about [Testcontainers](https://testcontainers.com/) which was discouraged in the article and also to me, creating throwaway containers sounded like a lot of overhead. Then a friend had the idea to create throwaway databases in a running PostgreSQL instance instead. I liked it as it sounded less cumbersome.
 
 In the end I came up with four approaches, first the approach with PGlite and then three different approaches for creating throwaway databases in a running PostgreSQL instance. Following I'll introduce the implementations and show some measurements I took on the performance.
 
@@ -18,7 +18,7 @@ For pushing the schema programmatically I used a function from drizzle-kit which
 
 ## General notes on the tests
 
-In all approaches I used the same tests. I also added some unit tests to see how they can be distinguished from the integration tests. Although this is a different topic I left them in because I don't think it distracts too much.
+In all approaches I used the same tests. I also added some unit tests to see how they can be distinguished from integration tests. Although this is a different topic, I left them in because I don't think it distracts too much.
 
 Writing the integration tests I especially took care that they fail if the database is not correctly cleaned up between tests. Here is the code from one of the integration test files:
 
@@ -91,6 +91,8 @@ export default defineProject({
 
 In the [setupFile](https://github.com/dyedwiper/cinesmall/blob/int-tests-pglite/ddd/src/shared/test/dbSetup.ts) the drizzle instance is mocked with an instance connected to PGlite. The package [@electric-sql/pglite](https://github.com/electric-sql/pglite) is used to create the PGlite instance.
 
+Also an `afterEach` hook is added to clear the database after each test.
+
 ```ts
 const db = drizzle({ client: new PGlite(), relations: schema.relations });
 await (await pushSchema(schema, db)).apply();
@@ -161,7 +163,7 @@ afterEach(() => {
 
 ### 3. Creating a throwaway database for each test file
 
-Like mentioned above you need to run test files sequentially when using a single database for all. This is not the case when you create a distinct database for each test file.
+As mentioned above you need to run test files sequentially when using a single database for all. This is not the case when you create a distinct database for each test file.
 
 The database is created in the [setupFile](https://github.com/dyedwiper/cinesmall/blob/int-tests-create/ddd/src/shared/test/dbSetup.ts).
 
@@ -177,6 +179,7 @@ const testPool = new Pool({ database: dbName });
 const db = drizzle({ client: testPool, relations: schema.relations });
 await (await pushSchema(schema, db)).apply();
 
+// Inspired by https://github.com/drizzle-team/drizzle-orm/issues/4205
 vi.doMock(import('../db/index.js'), async () => ({ db }));
 
 afterEach(async () => {
@@ -196,7 +199,7 @@ Unlike in the previous approach and similar to the PGlite approach, the drizzle 
 
 In PostgreSQL it is possible to [create databases from custom templates](https://www.postgresql.org/docs/current/manage-ag-templatedbs.html). A colleague suspected this could be faster than pushing the schema to each throwaway database.
 
-In [globalSetup](https://github.com/dyedwiper/cinesmall/blob/int-tests-template/ddd/src/shared/test/globalSetup.ts) such a template database is created:
+In [globalSetup](https://github.com/dyedwiper/cinesmall/blob/int-tests-template/ddd/src/shared/test/globalSetup.ts) such a template database is created and the schema is pushed to it:
 
 ```ts
 const templateDbName = 'cinesmall-test-template';
@@ -230,6 +233,7 @@ await adminPool.query(`CREATE DATABASE "${dbName}" TEMPLATE "cinesmall-test-temp
 const testPool = new Pool({ database: dbName });
 const db = drizzle({ client: testPool, relations: schema.relations });
 
+// Inspired by https://github.com/drizzle-team/drizzle-orm/issues/4205
 vi.doMock(import('../db/index.js'), async () => ({ db }));
 
 // ...
@@ -247,7 +251,7 @@ As the durations of the test are pretty consistent, I just paste one example per
 
 ### 1. PGlite
 
-```
+```plaintext
  Test Files  25 passed (25)
       Tests  32 passed (32)
    Start at  11:56:23
@@ -256,7 +260,7 @@ As the durations of the test are pretty consistent, I just paste one example per
 
 ### 2. Global throwaway database
 
-```
+```plaintext
  Test Files  25 passed (25)
       Tests  32 passed (32)
    Start at  12:02:04
@@ -265,7 +269,7 @@ As the durations of the test are pretty consistent, I just paste one example per
 
 ### 3. Throwaway database per test file
 
-```
+```plaintext
  Test Files  25 passed (25)
       Tests  32 passed (32)
    Start at  12:04:01
@@ -274,7 +278,7 @@ As the durations of the test are pretty consistent, I just paste one example per
 
 ### 4. Throwaway database per test file created from template
 
-```
+```plaintext
  Test Files  25 passed (25)
       Tests  32 passed (32)
    Start at  12:06:06
