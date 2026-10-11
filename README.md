@@ -33,6 +33,6 @@ All of the apps are working.
 
 To run them you need a Postgres database. Here is a guide how to set it up locally: https://orm.drizzle.team/docs/guides/postgresql-local-setup. After setting it up, you need to create an .env file with the connection details. The file .env.example gives orientation how it should look like.
 
-Then you just need to go the respective folder, run `npm i` and `npm run dev`.
+Then you just need to go the respective folder, run `npm i`, `npm run push-schema` and `npm run dev`.
 
 In the folder _http-requests_ you find requests that you can use with the [REST client for VSCode](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
