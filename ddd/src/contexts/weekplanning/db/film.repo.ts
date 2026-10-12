@@ -28,6 +28,16 @@ export async function saveFilm(film: Film) {
     await db.insert(films).values(mapped);
 }
 
-export async function savePoster(filmId: string, file: Buffer) {
-    await db.update(films).set({ poster: file }).where(eq(films.id, filmId));
+export async function getPosterByFilmId(id: string) {
+    const result = await db.query.films.findFirst({ where: { id } });
+
+    const poster = result?.poster;
+
+    return poster;
+}
+
+export async function savePoster(filmId: string, file: File) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    await db.update(films).set({ poster: buffer }).where(eq(films.id, filmId));
 }
