@@ -32,6 +32,7 @@ export const films = snakeCase.table('films', {
     title: varchar().notNull(),
     duration: integer().notNull(),
     poster: bytea(),
+    posterFileName: varchar(),
 });
 
 export const advertisements = snakeCase.table('advertisements', {

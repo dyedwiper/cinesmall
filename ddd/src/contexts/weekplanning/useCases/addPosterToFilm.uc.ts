@@ -1,12 +1,11 @@
-import { Id } from '../../../shared/domain/valueObjects/id.js';
-import { getFilmById, saveFilm, savePoster } from '../db/film.repo.js';
+import { getFilmById, savePoster } from '../db/film.repo.js';
 
-export async function addPosterToFilm(filmId: string, poster: File) {
+export async function addPosterToFilm(filmId: string, file: File, fileName: string) {
     const film = await getFilmById(filmId);
-    const posterId = Id.create();
-    film.addPoster(posterId);
 
-    await savePoster(film.id, poster);
+    if (film.hasPoster) {
+        throw new Error('The film already has a poster.');
+    }
 
-    await saveFilm(film);
+    await savePoster(film.id, file, fileName);
 }

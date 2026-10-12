@@ -8,13 +8,13 @@ interface CreateFilmParams {
     id?: string;
     title: string;
     duration: number;
-    posterId?: Id;
+    hasPoster: boolean;
 }
 
 interface FilmProps extends EntityProps {
     title: FilmTitle;
     duration: Duration;
-    posterId?: Id;
+    hasPoster: boolean;
 }
 
 export class Film extends AggregateRoot<FilmProps> {
@@ -22,21 +22,18 @@ export class Film extends AggregateRoot<FilmProps> {
         return this.props.duration.value;
     }
 
+    get hasPoster() {
+        return this.props.hasPoster;
+    }
+
     static create(params: CreateFilmParams) {
         const props = {
             id: Id.create(params.id),
             title: FilmTitle.create(params.title),
             duration: Duration.create(params.duration),
+            hasPoster: params.hasPoster,
         };
 
         return new Film(props);
-    }
-
-    addPoster(posterId: Id) {
-        if (this.props.posterId) {
-            throw new Error('The film already has a poster.');
-        }
-
-        this.props.posterId = posterId;
     }
 }

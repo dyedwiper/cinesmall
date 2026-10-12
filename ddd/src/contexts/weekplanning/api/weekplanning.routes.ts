@@ -35,7 +35,9 @@ app.post('film', async (c) => {
 app.get('poster/filmId/:filmId', async (c) => {
     const filmId = c.req.param('filmId');
 
-    const poster = await getPosterForFilm(filmId);
+    const dto = await getPosterForFilm(filmId);
+
+    c.header('Content-Disposition', `attachment; filename=${dto.fileName}`);
 
     // See: https://hono.dev/docs/helpers/streaming#stream
     return stream(c, async (stream) => {
@@ -44,20 +46,22 @@ app.get('poster/filmId/:filmId', async (c) => {
             console.log('Aborted!');
         });
 
-        if (!poster) {
+        if (!dto.file) {
             return stream.abort();
         }
 
         // Write a Uint8Array.
-        await stream.write(new Uint8Array(poster));
+        await stream.write(new Uint8Array(dto.file));
     });
 });
 
 app.post('poster', async (c) => {
     const body = await c.req.parseBody();
     const filmId = body['filmId'] as string;
-    const poster = body['file'] as File;
-    addPosterToFilm(filmId, poster);
+    const file = body['file'] as File;
+    const fileName = body['fileName'] as string;
+
+    await addPosterToFilm(filmId, file, fileName);
 
     return c.text('ok');
 });

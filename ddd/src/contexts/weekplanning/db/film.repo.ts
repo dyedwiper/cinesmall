@@ -1,7 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../../../shared/db/index.js';
 import { films } from '../../../shared/db/schema.js';
-import { Id } from '../../../shared/domain/valueObjects/id.js';
 import { Film } from '../domain/film.js';
 
 export async function getFilmById(id: string) {
@@ -11,7 +10,7 @@ export async function getFilmById(id: string) {
         throw new Error('Film not found.');
     }
 
-    const film = Film.create(result);
+    const film = Film.create({ hasPoster: !!result.poster, ...result });
 
     return film;
 }
@@ -31,13 +30,20 @@ export async function saveFilm(film: Film) {
 export async function getPosterByFilmId(id: string) {
     const result = await db.query.films.findFirst({ where: { id } });
 
-    const poster = result?.poster;
+    if (!result?.poster || !result.posterFileName) {
+        throw new Error('Poster not found.');
+    }
 
-    return poster;
+    const dto = {
+        fileName: result.posterFileName,
+        file: result.poster,
+    };
+
+    return dto;
 }
 
-export async function savePoster(filmId: string, file: File) {
+export async function savePoster(filmId: string, file: File, fileName: string) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    await db.update(films).set({ poster: buffer }).where(eq(films.id, filmId));
+    await db.update(films).set({ poster: buffer, posterFileName: fileName }).where(eq(films.id, filmId));
 }
