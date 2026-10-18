@@ -4,7 +4,7 @@ For a new TypeScript project I recently had to come up with a concept for integr
 - [Drizzle](https://orm.drizzle.team/) as ORM framework
 - [Vitest](https://vitest.dev/) as testing framework
 
-The main question was how to setup a database on which the tests can run. I didn't find much on the topic but the article [How to Test Your Node.js & Postgres App Using Drizzle & PGlite](https://dev.to/danielubenjamin/how-to-test-your-nodejs-postgres-app-using-drizzle-pglite-4fb3). So I took it as a starting point and implemented a POC with PGlite but wasn't really happy with it because it seemed quite slow. The article also mentioned [Testcontainers](https://testcontainers.com/) as a possible solution but discouraged it - and also to me, creating throwaway containers sounded like a lot of overhead. Then a friend had the idea to create throwaway databases in a running PostgreSQL instance instead and I followed that path.
+The main question was how to setup a database on which the tests can run. I didn't find much on the topic but the article [How to Test Your Node.js & Postgres App Using Drizzle & PGlite](https://dev.to/danielubenjamin/how-to-test-your-nodejs-postgres-app-using-drizzle-pglite-4fb3). gave me a starting point. I implemented a POC with PGlite but wasn't really happy with it because it seemed quite slow. The article also mentioned [Testcontainers](https://testcontainers.com/) as a possible solution but discouraged it - and also to me, creating throwaway containers sounded like a lot of overhead. Then a friend had the idea to create throwaway databases in a running PostgreSQL instance instead and I followed that path.
 
 In the end I came up with four approaches, first the approach with PGlite and then three different approaches for creating throwaway databases in a running PostgreSQL instance. Following I'll introduce the implementations and show some measurements I took on the performance.
 
@@ -18,7 +18,7 @@ For pushing the schema programmatically I used a function from drizzle-kit which
 
 ## General notes on the tests
 
-In all approaches I used the same tests. I also added some unit tests to see how they can be distinguished from integration tests. Although this is a different topic, I left them in because I don't think they distract too much.
+In all approaches I used the same tests. I also added some unit tests to see how they can be distinguished from integration tests. (Although this is a different topic, I left them in because I don't think they distract too much.)
 
 Writing the integration tests I especially took care that they fail if the database is not correctly cleaned up between tests. Here is the code from one of the integration test files:
 
