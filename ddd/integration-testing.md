@@ -38,7 +38,7 @@ describe('addScreening', () => {
             weekplanId: weekplanId,
             date: '2026-07-17',
             hallNumber: 1,
-            film: 'Xaver - Mein außerirdischer Freund',
+            film: 'Xaver und sein außerirdischer Freund',
             duration: 90,
         };
         await addScreening(dto);
