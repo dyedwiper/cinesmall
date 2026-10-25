@@ -1,8 +1,8 @@
 # Cinesmall - An example for DDD vs. CRUD
 
-This repo contains TypeScript implementations of the same example domain with different approaches.
+This repo contains TypeScript implementations of the same example domain with two different approaches: [DDD](https://en.wikipedia.org/wiki/Domain-driven_design) and [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete#RESTful_APIs).
 
-As frameworks I used [Hono](https://hono.dev/) and [Drizzle](https://orm.drizzle.team/).
+Both apps are working and can be run (see below). As frameworks I used [Hono](https://hono.dev/) and [Drizzle](https://orm.drizzle.team/).
 
 ## Domain
 
@@ -10,7 +10,7 @@ The domain is taken from the book [Domain Driven Transformation](https://dpunkt.
 
 ![image](./images/cinesmall%20domain.jpeg)
 
-### Hints
+### Remarks
 
 - As you see it is a German book. Though it is often recommended in DDD, I don't like non-english words in the code, so I translated the domain language.
 - I left out a few parts of the domain and added more detail to others because it seemed more fitting to carve out the architectural concepts.
@@ -27,11 +27,9 @@ This takes a classical Domain Driven Design approach dividing the code into boun
 
 This takes a classical CRUD approach having one route and one service per resource (or database table).
 
-## Running and testing the apps
+## Running the apps
 
-All of the apps are working.
-
-To run them you need a Postgres database. Here is a guide how to set it up locally: https://orm.drizzle.team/docs/guides/postgresql-local-setup. After setting it up, you need to create an .env file with the connection details. The file .env.example gives orientation how it should look like.
+To run the apps you need a Postgres database. Here is a guide how to set it up locally: https://orm.drizzle.team/docs/guides/postgresql-local-setup. After setting it up, you need to create a .env file with the connection details. The file .env.example shows you how it should look like.
 
 Then you just need to go the respective folder, run `npm i`, `npm run push-schema` and `npm run dev`.
 
