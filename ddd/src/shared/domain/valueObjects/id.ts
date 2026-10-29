@@ -17,7 +17,7 @@ export class Id extends ValueObject<IdProps> {
     static create(input?: string) {
         // validation
 
-        // TODO: Overthink if this is really the right place to set the UUID!
+        // TODO: Overthink if this is really the right place to create the UUID!
         const value = input ?? crypto.randomUUID();
 
         return new Id(value);
