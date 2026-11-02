@@ -20,7 +20,9 @@ export const weekplans = snakeCase.table('weekplans', {
 export const screenings = snakeCase.table('screenings', {
     id,
     ...timestamps,
-    weekplanId: uuid().notNull(),
+    weekplanId: uuid()
+        .notNull()
+        .references(() => weekplans.id),
     date: timestamp({ mode: 'string', withTimezone: true }).notNull(),
     hallNumber: integer().notNull(),
     film: varchar().notNull(),
@@ -30,7 +32,9 @@ export const screenings = snakeCase.table('screenings', {
 export const advertisements = snakeCase.table('advertisements', {
     id,
     ...timestamps,
-    screeningId: uuid().notNull(),
+    screeningId: uuid()
+        .notNull()
+        .references(() => screenings.id, { onDelete: 'cascade' }),
     name: varchar().notNull(),
     duration: integer().notNull(),
 });
@@ -38,7 +42,9 @@ export const advertisements = snakeCase.table('advertisements', {
 export const hallplans = snakeCase.table('hallplans', {
     id,
     ...timestamps,
-    screeningId: uuid().notNull(),
+    screeningId: uuid()
+        .notNull()
+        .references(() => screenings.id, { onDelete: 'cascade' }),
     hallNumber: integer().notNull(),
     reservedSeats: json(),
 });

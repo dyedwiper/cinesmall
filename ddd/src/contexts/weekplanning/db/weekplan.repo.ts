@@ -65,7 +65,7 @@ export async function saveWeekplan(weekplan: Weekplan) {
 
     const existing = await db.query.weekplans.findFirst({
         where: { id },
-        with: { screenings: true },
+        with: { screenings: { with: { advertisements: true } } },
     });
 
     const mappedWeekplan = mapWeekplanToDb(weekplan);
