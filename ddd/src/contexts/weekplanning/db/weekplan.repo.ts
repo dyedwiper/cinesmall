@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../../../shared/db/index.js';
-import { advertisements, screenings, weekplans } from '../../../shared/db/schema.js';
+import { advertisements, screenings, weekplans, type SelectScreening } from '../../../shared/db/schema.js';
 import { Advertisement } from '../domain/advertisement.js';
 import { Screening } from '../domain/screening.js';
 import { Weekplan } from '../domain/weekplan.js';
@@ -65,16 +65,13 @@ export async function saveWeekplan(weekplan: Weekplan) {
 
     const existing = await db.query.weekplans.findFirst({
         where: { id },
-        with: { screenings: true },
+        with: { screenings: { with: { advertisements: true } } },
     });
 
     const mappedWeekplan = mapWeekplanToDb(weekplan);
 
     if (existing) {
-        await removeScreenings(
-            existing.screenings.map((s) => s.id),
-            screenings.map((s) => s.id),
-        );
+        await removeScreenings(existing.screenings, screenings);
 
         await db.update(weekplans).set(mappedWeekplan).where(eq(weekplans.id, id));
     } else {
@@ -121,10 +118,11 @@ async function saveAdvertisment(advertisement: Advertisement) {
     }
 }
 
-async function removeScreenings(existingIds: string[], wantedIds: string[]) {
-    const screeningsToRemove = existingIds.filter((id) => !wantedIds.includes(id));
+async function removeScreenings(existing: SelectScreening[], wanted: Screening[]) {
+    const wantedIds = wanted.map((sc) => sc.id);
+    const screeningsToRemove = existing.filter((ex) => !wantedIds.includes(ex.id));
 
-    const promises = screeningsToRemove.map((id) => db.delete(screenings).where(eq(screenings.id, id)));
+    const promises = screeningsToRemove.map((sc) => db.delete(screenings).where(eq(screenings.id, sc.id)));
 
     await Promise.all(promises);
 }
